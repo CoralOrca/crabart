@@ -14,7 +14,7 @@
 // Reference image context — prepended when images are attached
 // ---------------------------------------------------------------------------
 
-export const REFERENCE_CONTEXT = `- Image 1: This is the canonical character reference. The generated image MUST match this character exactly — same species, same face structure, same proportions, same coral/red color, same claw shape. Only the expression, outfit, and accessory should change.
+export const REFERENCE_CONTEXT = `- Image 1: This is the canonical character reference. The generated image MUST match this character exactly — same species, same face structure, same proportions, same coral/red color, same claw shape (simple 2-part pincer: upper + lower, never fingers). Only the expression, outfit, and accessory should change.
 - Image 2: This is a composition mask. The white filled area on the black background defines the EXACT position, size, and silhouette boundaries for the character. The character MUST be positioned, sized, and shaped to precisely fill this white area — no shifting left/right/up/down, no resizing, no silhouette changes. The character's body outline must match the mask's white shape exactly. The character faces LEFT (2/3 orientation to the left), with the claw visible in the LOWER-RIGHT. The final image background MUST be exactly #FAFAF3 (not black, not white — warm off-white #FAFAF3).
 - Image 3: This is the EXPRESSION REFERENCE — a single face showing the target expression. Use Image 3 ONLY for the facial features: copy the exact eye shape, eye size, pupil position, mouth shape, and brow position. IGNORE everything else about Image 3 — do NOT use it for body shape, silhouette, position, or size. The silhouette and position come EXCLUSIVELY from Image 2 (the composition mask). Image 3 controls ONLY the eyes and mouth.`;
 
@@ -26,13 +26,13 @@ export const BASE_PROMPT = `Generate a new variation of the character from Image
 
 This is an AI-native NFT collection. Each image must preserve identity continuity while allowing controlled variation through layers.
 
-The character is a stylized anthropomorphic crustacean with a Pepe-inspired face.
+The character is a stylized crustacean with a Pepe-inspired face.
 The character has:
 - A triangular, faceted body shape
 - Coral / red color palette with subtle shading
 - Large expressive Pepe-style eyes and mouth
 - Pupils are black with two white reflective highlights
-- A single visible claw-like hand with smooth, rounded forms
+- A single visible crab claw with smooth, rounded forms (a 2-part pincer: upper + lower)
 - Clean, bold illustration style
 - Flat yet refined lighting
 
@@ -41,8 +41,9 @@ CRITICAL COMPOSITION RULES (must be identical across every image in the collecti
 - Do not change the species, body shape, or core facial features
 - The character is oriented roughly 2/3 facing to the LEFT of the image, matching Image 1 exactly
 - The character's gaze direction is always looking toward the LEFT side of the image
-- The claw-like hand is ALWAYS visible in the LOWER-RIGHT area of the image, holding the accessory
+- The claw is ALWAYS visible in the LOWER-RIGHT area of the image, holding the accessory
 - The claw position must remain consistent — lower-right quadrant, same relative placement as Image 1
+- The claw must be a simple 2-part pincer (upper + lower) — never more than two pincer parts
 
 Style constraints:
 - 2D illustration or clean semi-flat digital art
@@ -58,7 +59,7 @@ Background:
 
 Do NOT:
 - Change the character species or body shape
-- Remove the claw-like hand or move it away from the lower-right area
+- Remove the claw or move it away from the lower-right area
 - Alter the coral/red base color
 - Remove the white reflective highlights in the pupils
 - Turn this into a different meme character
@@ -70,6 +71,8 @@ Do NOT:
 - Extend body parts outside the white mask boundaries
 - Flip or mirror the character — the character must ALWAYS face left
 - Change the background color from #FAFAF3
+- Render the claw as a human hand (no palm, no fingers, no thumb)
+- Add extra claw digits/parts beyond a simple 2-part pincer
 
 This image is part of a generative NFT collection.
 Visual consistency across the collection is more important than novelty.
@@ -234,11 +237,12 @@ Outfit layer:
 - Outfit must not obscure the face or claw
 - Fabric should feel soft and contemporary
 
-Accessory and pose:
-- The claw-like hand is holding: ${accessoryMeta?.label ?? options.accessory}
+Accessory and claw:
+- The claw is holding: ${accessoryMeta?.label ?? options.accessory}
 - The claw MUST be visible in the lower-right area of the image, matching Image 1's claw position
-- Pose feels casual and relaxed — character faces left, claw on the right
-- The claw grip should feel anatomically consistent with the character`;
+- The claw must be a simple 2-part pincer (upper + lower) — no palm, no fingers, no extra digits
+- Hold the accessory by pinching it between the two pincer parts (not wrapping around it)
+- Keep a simple neutral pose — character faces left, claw on the right`;
 
   const custom = options.customNotes?.trim()
     ? `\n\nAdditional notes:\n${options.customNotes.trim()}`

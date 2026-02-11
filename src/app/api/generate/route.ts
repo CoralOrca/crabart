@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
 import { REFERENCE_CONTEXT } from "@/lib/prompt";
+import { supabase } from "@/lib/supabase";
 import * as fs from "node:fs";
 import * as path from "node:path";
 
@@ -57,6 +58,8 @@ function getExpressionImage(expressionId: string): string | null {
 interface GenerateRequest {
   prompt: string;
   expressionId?: string;
+  outfit?: string;
+  accessory?: string;
 }
 
 export async function POST(req: NextRequest) {
@@ -181,6 +184,44 @@ export async function POST(req: NextRequest) {
     console.log(
       `[generate] Success — received ${imageMimeType} image (${Math.round((imageBase64.length * 3) / 4 / 1024)}KB)`
     );
+
+    // Save to Supabase (non-blocking — errors are logged but don't affect the response)
+    const imageId = crypto.randomUUID();
+    const ext = (imageMimeType ?? "image/png").includes("png") ? "png" : "jpg";
+    const storagePath = `generations/${imageId}.${ext}`;
+    const imageBuffer = Buffer.from(imageBase64, "base64");
+
+    const { error: uploadError } = await supabase.storage
+      .from("generations")
+      .upload(storagePath, imageBuffer, {
+        contentType: imageMimeType ?? "image/png",
+        upsert: false,
+      });
+
+    if (uploadError) {
+      console.error("[generate] Storage upload failed:", uploadError.message);
+    } else {
+      const { data: urlData } = supabase.storage
+        .from("generations")
+        .getPublicUrl(storagePath);
+
+      const { error: dbError } = await supabase.from("generations").insert({
+        id: imageId,
+        expression: body.expressionId ?? "unknown",
+        outfit: body.outfit ?? "unknown",
+        accessory: body.accessory ?? "unknown",
+        image_path: storagePath,
+        image_url: urlData.publicUrl,
+        prompt,
+        mime_type: imageMimeType ?? "image/png",
+      });
+
+      if (dbError) {
+        console.error("[generate] DB insert failed:", dbError.message);
+      } else {
+        console.log(`[generate] Saved to Supabase: ${storagePath}`);
+      }
+    }
 
     return NextResponse.json({
       image: imageBase64,

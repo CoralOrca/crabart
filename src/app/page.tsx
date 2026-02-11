@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
+import Link from "next/link";
 import {
   EXPRESSIONS,
   OUTFITS,
@@ -18,7 +19,6 @@ interface HistoryEntry {
   expression: string;
   outfit: string;
   accessory: string;
-  customNotes: string;
   imageDataUrl: string;
   prompt: string;
 }
@@ -32,18 +32,13 @@ export default function PlaygroundPage() {
   const [expression, setExpression] = useState<string>(EXPRESSIONS[0].id);
   const [outfit, setOutfit] = useState<string>(OUTFITS[0].id);
   const [accessory, setAccessory] = useState<string>(ACCESSORIES[0].id);
-  const [customNotes, setCustomNotes] = useState("");
 
-  // Prompt
-  const [showPrompt, setShowPrompt] = useState(false);
-  const [showAbout, setShowAbout] = useState(false);
 
   // Generation state
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [currentImage, setCurrentImage] = useState<string | null>(null);
   const [currentMime, setCurrentMime] = useState<string>("image/png");
-  const [modelText, setModelText] = useState<string | null>(null);
 
   // History
   const [history, setHistory] = useState<HistoryEntry[]>([]);
@@ -59,7 +54,7 @@ export default function PlaygroundPage() {
     expression,
     outfit,
     accessory,
-    customNotes,
+    customNotes: "",
   });
 
   // -------------------------------------------------------------------------
@@ -69,7 +64,6 @@ export default function PlaygroundPage() {
   const handleGenerate = useCallback(async () => {
     setLoading(true);
     setError(null);
-    setModelText(null);
     setSelectedHistoryId(null);
 
     try {
@@ -79,6 +73,8 @@ export default function PlaygroundPage() {
         body: JSON.stringify({
           prompt: currentPrompt,
           expressionId: expression,
+          outfit,
+          accessory,
         }),
       });
 
@@ -91,7 +87,6 @@ export default function PlaygroundPage() {
       const dataUrl = `data:${data.mimeType};base64,${data.image}`;
       setCurrentImage(dataUrl);
       setCurrentMime(data.mimeType);
-      if (data.text) setModelText(data.text);
 
       // Add to history
       const entry: HistoryEntry = {
@@ -100,7 +95,6 @@ export default function PlaygroundPage() {
         expression,
         outfit,
         accessory,
-        customNotes,
         imageDataUrl: dataUrl,
         prompt: currentPrompt,
       };
@@ -111,7 +105,7 @@ export default function PlaygroundPage() {
     } finally {
       setLoading(false);
     }
-  }, [currentPrompt, expression, outfit, accessory, customNotes]);
+  }, [currentPrompt, expression, outfit, accessory]);
 
   // -------------------------------------------------------------------------
   // Download
@@ -135,7 +129,6 @@ export default function PlaygroundPage() {
     setExpression(entry.expression);
     setOutfit(entry.outfit);
     setAccessory(entry.accessory);
-    setCustomNotes(entry.customNotes);
     setSelectedHistoryId(entry.id);
   }, []);
 
@@ -164,65 +157,23 @@ export default function PlaygroundPage() {
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-100 text-xl">
               🦀
             </div>
-            <div>
-              <h1 className="text-lg font-bold tracking-tight">
-                CrabArt Playground
-              </h1>
-              <p className="text-xs text-zinc-500">
-                Nano Banana Image Engine
-              </p>
-            </div>
+            <h1 className="text-lg font-bold tracking-tight">
+              CrabArt
+            </h1>
           </div>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setShowAbout(!showAbout)}
+          <div className="flex items-center gap-2">
+            <Link
+              href="/gallery"
               className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-600 transition hover:bg-zinc-200"
             >
-              About
-            </button>
+              Gallery
+            </Link>
             <span className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-600">
               crabart.wtf
             </span>
           </div>
         </div>
       </header>
-
-      {/* About Panel */}
-      {showAbout && (
-        <div className="border-b border-zinc-200 bg-white">
-          <div className="mx-auto max-w-7xl px-6 py-6">
-            <div className="grid gap-6 md:grid-cols-3">
-              <div>
-                <h3 className="mb-2 text-sm font-semibold text-zinc-900">What is CrabArt?</h3>
-                <p className="text-sm leading-relaxed text-zinc-600">
-                  CrabArt is an AI-native NFT collection on Base. One new piece is generated and
-                  auctioned every 24 hours, forever. Each image features the same character — a
-                  stylized crustacean with a Pepe-inspired face — in a unique combination of
-                  expression, outfit, and accessory.
-                </p>
-              </div>
-              <div>
-                <h3 className="mb-2 text-sm font-semibold text-zinc-900">How It Works</h3>
-                <p className="text-sm leading-relaxed text-zinc-600">
-                  Art is generated using Google&apos;s Nano Banana (Gemini 2.5 Flash Image) with a
-                  locked character reference and composition mask for visual consistency. Each piece
-                  varies across {EXPRESSIONS.length} expressions, {OUTFITS.length} outfits, and {ACCESSORIES.length} accessories
-                  — over {(EXPRESSIONS.length * OUTFITS.length * ACCESSORIES.length).toLocaleString()} unique combinations.
-                </p>
-              </div>
-              <div>
-                <h3 className="mb-2 text-sm font-semibold text-zinc-900">Auction Economics</h3>
-                <p className="text-sm leading-relaxed text-zinc-600">
-                  Each auction runs for 24 hours with a 0.001 ETH reserve price on Base.
-                  Proceeds are split: 25% to the creator, 75% to the treasury. Every 10th
-                  CrabArt goes directly to the founder wallet. No governance in v1 — just
-                  art and auctions.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       <main className="mx-auto max-w-7xl px-6 py-8">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[380px_1fr]">
@@ -292,18 +243,6 @@ export default function PlaygroundPage() {
                 ))}
               </select>
 
-              {/* Custom Notes */}
-              <label className="mb-1 block text-sm font-medium text-zinc-700">
-                Custom Notes{" "}
-                <span className="font-normal text-zinc-400">(optional)</span>
-              </label>
-              <textarea
-                value={customNotes}
-                onChange={(e) => setCustomNotes(e.target.value)}
-                placeholder="e.g. &quot;Make it look more moody&quot; or &quot;Add rain drops&quot;"
-                rows={3}
-                className="w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2.5 text-sm placeholder:text-zinc-400 focus:border-red-300 focus:outline-none focus:ring-2 focus:ring-red-100"
-              />
             </section>
 
             {/* Generate Button */}
@@ -322,40 +261,6 @@ export default function PlaygroundPage() {
               )}
             </button>
 
-            {/* Prompt Preview */}
-            <section className="rounded-2xl border border-zinc-200 bg-white shadow-sm">
-              <button
-                onClick={() => setShowPrompt(!showPrompt)}
-                className="flex w-full items-center justify-between px-6 py-4 text-left"
-              >
-                <span className="text-sm font-semibold uppercase tracking-wider text-zinc-500">
-                  Full Prompt
-                </span>
-                <span className="text-zinc-400">{showPrompt ? "▲" : "▼"}</span>
-              </button>
-              {showPrompt && (
-                <div className="border-t border-zinc-100 px-6 py-4">
-                  <div className="mb-3 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-700">
-                    Reference context (prepended by API): Image 1 = character
-                    reference, Image 2 = composition mask
-                  </div>
-                  <pre className="max-h-80 overflow-auto whitespace-pre-wrap text-xs leading-relaxed text-zinc-600">
-                    {currentPrompt}
-                  </pre>
-                </div>
-              )}
-            </section>
-
-            {/* Stats */}
-            <div className="flex items-center justify-center gap-4 text-[11px] text-zinc-400">
-              <span>{EXPRESSIONS.length} expressions</span>
-              <span>·</span>
-              <span>{OUTFITS.length} outfits</span>
-              <span>·</span>
-              <span>{ACCESSORIES.length} accessories</span>
-              <span>·</span>
-              <span>{(EXPRESSIONS.length * OUTFITS.length * ACCESSORIES.length).toLocaleString()} combos</span>
-            </div>
           </div>
 
           {/* ─── Right Panel: Image + History ─── */}
@@ -366,9 +271,7 @@ export default function PlaygroundPage() {
                 {loading ? (
                   <div className="flex flex-col items-center gap-4 text-zinc-400">
                     <SpinnerLarge />
-                    <p className="text-sm">
-                      Generating with Nano Banana...
-                    </p>
+                    <p className="text-sm">Generating...</p>
                   </div>
                 ) : currentImage ? (
                   /* eslint-disable-next-line @next/next/no-img-element */
@@ -386,15 +289,6 @@ export default function PlaygroundPage() {
                   </div>
                 )}
               </div>
-
-              {/* Model text feedback */}
-              {modelText && !loading && (
-                <div className="border-t border-blue-100 bg-blue-50 px-6 py-3">
-                  <p className="text-xs text-blue-700">
-                    <span className="font-semibold">Model:</span> {modelText}
-                  </p>
-                </div>
-              )}
 
               {/* Error */}
               {error && (
