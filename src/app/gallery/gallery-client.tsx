@@ -1,46 +1,20 @@
-import { Suspense } from "react";
-import { supabase } from "@/lib/supabase";
-<<<<<<< Updated upstream
-import { GalleryGrid } from "./gallery-grid";
-=======
-import GalleryClient from "./gallery-client";
->>>>>>> Stashed changes
+"use client";
 
-export const metadata = {
-  title: "CrabArt Gallery",
-  description: "Browse all generated CrabArt pieces",
-};
+import Link from "next/link";
+import { GalleryGridWithAdmin } from "./gallery-grid-with-admin";
+import Footer from "@/components/Footer";
+import { useSearchParams } from "next/navigation";
+import type { Generation } from "./page";
 
-export const revalidate = 60;
-
-export interface Generation {
-  id: string;
-  created_at: string;
-  expression: string;
-  outfit: string;
-  accessory: string;
-  image_url: string;
-}
-
-async function getGenerations(): Promise<Generation[]> {
-  const { data, error } = await supabase
-    .from("generations")
-    .select("id, created_at, expression, outfit, accessory, image_url")
-    .order("created_at", { ascending: false })
-    .limit(100);
-
-  if (error) {
-    console.error("Failed to fetch generations:", error.message);
-    return [];
-  }
-  return data ?? [];
-}
-
-export default async function GalleryPage() {
-  const generations = await getGenerations();
+export default function GalleryClient({
+  generations,
+}: {
+  generations: Generation[];
+}) {
+  const searchParams = useSearchParams();
+  const isAdmin = searchParams.get("admin") === "true";
 
   return (
-<<<<<<< Updated upstream
     <div className="min-h-screen bg-[#fafaf8] text-zinc-900">
       {/* Header */}
       <header className="border-b border-zinc-200 bg-white">
@@ -65,6 +39,14 @@ export default async function GalleryPage() {
             >
               Playground
             </Link>
+            {isAdmin && (
+              <Link
+                href="/gallery"
+                className="rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-600"
+              >
+                Admin Mode
+              </Link>
+            )}
           </div>
         </div>
       </header>
@@ -74,6 +56,7 @@ export default async function GalleryPage() {
           <h2 className="text-xl font-bold">Gallery</h2>
           <p className="text-sm text-zinc-500">
             {generations.length} generation{generations.length !== 1 ? "s" : ""}
+            {isAdmin && " — Admin mode enabled"}
           </p>
         </div>
 
@@ -86,27 +69,11 @@ export default async function GalleryPage() {
             </p>
           </div>
         ) : (
-          <GalleryGrid generations={generations} />
+          <GalleryGridWithAdmin generations={generations} isAdmin={isAdmin} />
         )}
       </main>
 
-      <footer className="border-t border-zinc-200 bg-white py-4 text-center text-xs text-zinc-400">
-        built by{" "}
-        <a
-          href="https://x.com/coralorca"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-zinc-600 transition hover:text-zinc-900"
-        >
-          @coralorca
-        </a>
-        &apos;s agent
-      </footer>
+      <Footer />
     </div>
-=======
-    <Suspense fallback={<div>Loading...</div>}>
-      <GalleryClient generations={generations} />
-    </Suspense>
->>>>>>> Stashed changes
   );
 }
