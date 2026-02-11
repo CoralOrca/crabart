@@ -72,6 +72,21 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Rate limit: max 100 generations per day
+    const todayStart = new Date();
+    todayStart.setUTCHours(0, 0, 0, 0);
+    const { count, error: countError } = await supabase
+      .from("generations")
+      .select("*", { count: "exact", head: true })
+      .gte("created_at", todayStart.toISOString());
+
+    if (!countError && count !== null && count >= 50) {
+      return NextResponse.json(
+        { error: "Daily generation limit reached (50/day). Try again tomorrow!" },
+        { status: 429 }
+      );
+    }
+
     const body = (await req.json()) as GenerateRequest;
     const { prompt, expressionId } = body;
 
@@ -188,7 +203,7 @@ export async function POST(req: NextRequest) {
     // Save to Supabase (non-blocking — errors are logged but don't affect the response)
     const imageId = crypto.randomUUID();
     const ext = (imageMimeType ?? "image/png").includes("png") ? "png" : "jpg";
-    const storagePath = `generations/${imageId}.${ext}`;
+    const storagePath = `${imageId}.${ext}`;
     const imageBuffer = Buffer.from(imageBase64, "base64");
 
     const { error: uploadError } = await supabase.storage

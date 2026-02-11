@@ -154,12 +154,19 @@ export default function PlaygroundPage() {
       <header className="border-b border-zinc-200 bg-white">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-100 text-xl">
-              🦀
-            </div>
-            <h1 className="text-lg font-bold tracking-tight">
-              CrabArt
-            </h1>
+            <Link href="/" className="flex items-center gap-3">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/crabartlogo.png" alt="CrabArt" className="h-10 w-10 rounded-xl" />
+              <h1 className="text-lg font-bold tracking-tight">
+                CrabArt
+              </h1>
+            </Link>
+            <Link
+              href="/wtf"
+              className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-600 transition hover:bg-zinc-200"
+            >
+              wtf?
+            </Link>
           </div>
           <div className="flex items-center gap-2">
             <Link
@@ -168,9 +175,6 @@ export default function PlaygroundPage() {
             >
               Gallery
             </Link>
-            <span className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-600">
-              crabart.wtf
-            </span>
           </div>
         </div>
       </header>
@@ -282,7 +286,8 @@ export default function PlaygroundPage() {
                   />
                 ) : (
                   <div className="flex flex-col items-center gap-3 text-zinc-400">
-                    <div className="text-6xl">🦀</div>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="/crabartlogo.png" alt="CrabArt" className="h-16 w-16 opacity-40" />
                     <p className="text-sm">
                       Select variations and hit Generate
                     </p>
@@ -363,6 +368,19 @@ export default function PlaygroundPage() {
 
       {/* Hidden download anchor */}
       <a ref={downloadRef} className="hidden" />
+
+      <footer className="border-t border-zinc-200 bg-white py-4 text-center text-xs text-zinc-400">
+        built by{" "}
+        <a
+          href="https://x.com/coralorca"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-zinc-600 transition hover:text-zinc-900"
+        >
+          @coralorca
+        </a>
+        &apos;s agent
+      </footer>
     </div>
   );
 }
