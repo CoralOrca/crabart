@@ -101,11 +101,8 @@ export const EXPRESSIONS = [
 ] as const;
 
 export const OUTFITS = [
-  { id: "topless", label: "Topless" },
   // Hoodies & Sweats
   { id: "grey-hoodie", label: "Grey Hoodie" },
-  { id: "black-hoodie", label: "Black Hoodie" },
-  { id: "cream-hoodie", label: "Cream Hoodie" },
   { id: "forest-green-hoodie", label: "Forest Green Hoodie" },
   { id: "burgundy-crewneck", label: "Burgundy Crewneck" },
   { id: "oversized-sweatshirt", label: "Oversized Sweatshirt" },
@@ -113,59 +110,54 @@ export const OUTFITS = [
   { id: "navy-bomber", label: "Navy Bomber Jacket" },
   { id: "denim-jacket", label: "Denim Jacket" },
   { id: "olive-vest", label: "Olive Puffer Vest" },
-  { id: "windbreaker", label: "Windbreaker" },
   { id: "black-leather-jacket", label: "Black Leather Jacket" },
   { id: "varsity-jacket", label: "Varsity Jacket" },
   { id: "trench-coat", label: "Beige Trench Coat" },
-  { id: "parka", label: "Khaki Parka" },
+  { id: "parka", label: "Parka with Fur Hood" },
   { id: "fleece-zip", label: "Fleece Half-Zip" },
   { id: "rain-jacket", label: "Yellow Rain Jacket" },
   // Shirts & Tees
   { id: "white-tee", label: "White T-Shirt" },
-  { id: "black-tee", label: "Black T-Shirt" },
   { id: "striped-tee", label: "Striped T-Shirt" },
-  { id: "flannel-shirt", label: "Flannel Shirt" },
+  { id: "skull-tee", label: "Black T-Shirt with Skull" },
   { id: "hawaiian-shirt", label: "Hawaiian Shirt" },
   { id: "oxford-shirt", label: "Light Blue Oxford Shirt" },
-  { id: "henley", label: "Grey Henley" },
   { id: "polo", label: "Navy Polo" },
   { id: "linen-shirt", label: "White Linen Shirt" },
-  { id: "chambray-shirt", label: "Chambray Shirt" },
   // Formal & Smart
   { id: "turtleneck", label: "Black Turtleneck" },
   { id: "cardigan", label: "Charcoal Cardigan" },
   { id: "blazer", label: "Navy Blazer" },
-  { id: "suit-jacket", label: "Charcoal Suit Jacket" },
+  { id: "tuxedo", label: "Tuxedo Jacket" },
   { id: "waistcoat", label: "Tweed Waistcoat" },
   { id: "cable-knit", label: "Cream Cable Knit Sweater" },
   // Casual & Sport
-  { id: "tank-top", label: "Grey Tank Top" },
+  { id: "torn-tee", label: "Torn Tee Shirt" },
   { id: "jersey", label: "Sports Jersey" },
   { id: "track-jacket", label: "Track Jacket" },
   { id: "fishing-vest", label: "Fishing Vest" },
   { id: "rugby-shirt", label: "Rugby Shirt" },
-  // Statement
+  // Statement & Creative
   { id: "kimono-jacket", label: "Dark Kimono Jacket" },
   { id: "poncho", label: "Woven Poncho" },
   { id: "cape", label: "Short Cape" },
   { id: "lab-coat", label: "Lab Coat" },
   { id: "chef-coat", label: "Chef Coat" },
+  { id: "samurai", label: "Samurai Chest Plate" },
+  { id: "knight-armor", label: "Knight Armor" },
+  { id: "sailor-suit", label: "Sailor Suit" },
+  { id: "cowboy-duster", label: "Cowboy Duster" },
+  { id: "knight-armor-gold", label: "Gold Knight armor" },
+  { id: "academic-gown", label: "Academic Gown" },
 ] as const;
 
 export const ACCESSORIES = [
   // Smoking & Drinks
   { id: "cigarette", label: "Cigarette" },
-  { id: "joint", label: "Joint" },
   { id: "pipe", label: "Smoking Pipe" },
-  { id: "cigar", label: "Cigar" },
   { id: "coffee-cup", label: "Coffee Cup" },
-  { id: "espresso", label: "Espresso Cup" },
-  { id: "tea-cup", label: "Tea Cup" },
   { id: "cocktail", label: "Cocktail Glass" },
-  { id: "wine-glass", label: "Wine Glass" },
   { id: "beer-can", label: "Beer Can" },
-  { id: "can-of-soda", label: "Can of Soda" },
-  { id: "smoothie", label: "Smoothie Cup" },
   // Tech & Tools
   { id: "phone", label: "Smartphone" },
   { id: "pen", label: "Fountain Pen" },
@@ -179,7 +171,6 @@ export const ACCESSORIES = [
   { id: "book", label: "Small Book" },
   { id: "newspaper", label: "Folded Newspaper" },
   { id: "rose", label: "Single Red Rose" },
-  { id: "sunflower", label: "Sunflower" },
   { id: "diamond", label: "Diamond" },
   { id: "gold-coin", label: "Gold Coin" },
   { id: "key", label: "Old Key" },
@@ -188,7 +179,6 @@ export const ACCESSORIES = [
   { id: "rubber-duck", label: "Rubber Duck" },
   // Food
   { id: "apple", label: "Apple" },
-  { id: "banana", label: "Banana" },
   { id: "donut", label: "Donut" },
   { id: "ice-cream", label: "Ice Cream Cone" },
   { id: "sushi-roll", label: "Sushi Roll" },
@@ -202,6 +192,17 @@ export const ACCESSORIES = [
   { id: "nothing", label: "Nothing (empty claw)" },
   // Weapons & Fantasy
   { id: "katana", label: "Katana" },
+  { id: "lightsaber", label: "Lightsaber" },
+  { id: "magic-wand", label: "Magic Wand" },
+  // Crypto & Agent
+  { id: "eth-crystal", label: "Glowing ETH Crystal" },
+  { id: "scroll", label: "Ancient Scroll" },
+  { id: "crystal-ball", label: "Crystal Ball" },
+  // Curiosities
+  { id: "skull", label: "Tiny Skull" },
+  { id: "telescope", label: "Brass Telescope" },
+  { id: "globe", label: "Tiny Globe" },
+  { id: "butterfly-net", label: "Butterfly Net" },
 ] as const;
 
 // ---------------------------------------------------------------------------
