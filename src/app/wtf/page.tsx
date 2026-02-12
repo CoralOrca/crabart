@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Footer from "@/components/Footer";
 
 export const metadata = {
   title: "CrabArt — wtf?",
@@ -155,18 +156,7 @@ export default function WtfPage() {
         </div>
       </main>
 
-      <footer className="border-t border-zinc-200 bg-white py-4 text-center text-xs text-zinc-400">
-        built by{" "}
-        <a
-          href="https://x.com/coralorca"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-zinc-600 transition hover:text-zinc-900"
-        >
-          @coralorca
-        </a>
-        &apos;s agent
-      </footer>
+      <Footer />
     </div>
   );
 }
