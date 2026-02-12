@@ -31,7 +31,7 @@ export default function Footer() {
             >
               @coralorca
             </a>
-            &apos;s agent
+            &apos;s openclaw
           </p>
           
           <button
