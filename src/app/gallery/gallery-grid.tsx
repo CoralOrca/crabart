@@ -17,12 +17,20 @@ export function GalleryGrid({
   generations: Generation[];
 }) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [brokenImageIds, setBrokenImageIds] = useState<Set<string>>(new Set());
+
+  // Filter out broken images
+  const visibleGenerations = generations.filter(gen => !brokenImageIds.has(gen.id));
 
   const selected = selectedId
-    ? generations.find((g) => g.id === selectedId) ?? null
+    ? visibleGenerations.find((g) => g.id === selectedId) ?? null
     : null;
 
   const close = useCallback(() => setSelectedId(null), []);
+
+  const handleImageError = useCallback((id: string) => {
+    setBrokenImageIds(prev => new Set(prev).add(id));
+  }, []);
 
   // Close on Escape
   useEffect(() => {
@@ -38,7 +46,7 @@ export function GalleryGrid({
     <>
       {/* Grid */}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-        {generations.map((gen) => (
+        {visibleGenerations.map((gen) => (
           <button
             key={gen.id}
             onClick={() => setSelectedId(gen.id)}
@@ -49,6 +57,7 @@ export function GalleryGrid({
               src={gen.image_url}
               alt={`CrabArt — ${getLabel(EXPRESSIONS, gen.expression)}`}
               className="h-full w-full object-cover"
+              onError={() => handleImageError(gen.id)}
             />
             <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/60 to-transparent px-2 pb-2 pt-6 opacity-0 transition group-hover:opacity-100">
               <p className="truncate text-xs font-medium text-white">
@@ -88,6 +97,10 @@ export function GalleryGrid({
                 src={selected.image_url}
                 alt="CrabArt"
                 className="h-full w-full object-contain"
+                onError={() => {
+                  handleImageError(selected.id);
+                  close(); // Close modal if image fails to load
+                }}
               />
             </div>
 
