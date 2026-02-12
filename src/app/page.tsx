@@ -322,7 +322,6 @@ export default function PlaygroundPage() {
                     )}
                     <div className="relative z-10 flex flex-col items-center gap-4">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src="/crabartlogo.png" alt="CrabArt" className="h-20 w-20 opacity-50" />
                       <p className="text-xl font-semibold text-zinc-600">
                         Select variations and hit Generate
                       </p>
