@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import Link from "next/link";
 import {
   EXPRESSIONS,
@@ -8,6 +8,7 @@ import {
   ACCESSORIES,
   buildPrompt,
 } from "@/lib/prompt";
+import { createClient } from "@supabase/supabase-js";
 import Footer from "@/components/Footer";
 
 // ---------------------------------------------------------------------------
@@ -46,6 +47,26 @@ export default function PlaygroundPage() {
   const [selectedHistoryId, setSelectedHistoryId] = useState<string | null>(
     null
   );
+
+  // Latest image from Supabase (shown as muted background)
+  const [latestImageUrl, setLatestImageUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (!url || !key) return;
+
+    const sb = createClient(url, key);
+    sb.from("generations")
+      .select("image_url")
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .then(({ data }) => {
+        if (data?.[0]?.image_url) {
+          setLatestImageUrl(data[0].image_url);
+        }
+      });
+  }, []);
 
   // Ref for download link
   const downloadRef = useRef<HTMLAnchorElement>(null);
@@ -286,12 +307,26 @@ export default function PlaygroundPage() {
                     className="h-full w-full object-contain"
                   />
                 ) : (
-                  <div className="flex flex-col items-center gap-3 text-zinc-400">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src="/crabartlogo.png" alt="CrabArt" className="h-16 w-16 opacity-40" />
-                    <p className="text-sm">
-                      Select variations and hit Generate
-                    </p>
+                  <div className="relative flex h-full w-full items-center justify-center">
+                    {latestImageUrl && (
+                      <>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={latestImageUrl}
+                          alt=""
+                          className="absolute inset-0 h-full w-full object-contain"
+                        />
+                        {/* Beige muting overlay */}
+                        <div className="absolute inset-0 bg-[#f5f0e8]/75" />
+                      </>
+                    )}
+                    <div className="relative z-10 flex flex-col items-center gap-4">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src="/crabartlogo.png" alt="CrabArt" className="h-20 w-20 opacity-50" />
+                      <p className="text-xl font-semibold text-zinc-600">
+                        Select variations and hit Generate
+                      </p>
+                    </div>
                   </div>
                 )}
               </div>
