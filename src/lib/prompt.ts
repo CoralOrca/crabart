@@ -32,6 +32,9 @@ The character has:
 - Coral / red color palette with subtle shading
 - Large expressive Pepe-style eyes and mouth
 - Pupils are black with two white reflective highlights
+- NO nose, NO nostrils — the face is completely flat between the eyes and mouth
+- NO eyebrows — expression is conveyed ONLY through eye shape, pupil position, and mouth
+- NO hair — the top of the head is smooth, bare shell/carapace
 - A single visible crab claw with smooth, rounded forms (a 2-part pincer: upper + lower)
 - Clean, bold illustration style
 - Flat yet refined lighting
@@ -51,6 +54,7 @@ Style constraints:
 - Soft gradients, no heavy textures
 - No photorealism
 - No background clutter
+- No white outline, glow, or border around the character — edges blend directly into the #FAFAF3 background
 
 Background:
 - EXACT background color: #FAFAF3 (warm off-white). Fill the entire background with this exact hex color
@@ -63,7 +67,9 @@ Do NOT:
 - Alter the coral/red base color
 - Remove the white reflective highlights in the pupils
 - Turn this into a different meme character
-- Add a nose or nostrils to the character
+- Add a nose, nostrils, or any nasal feature to the character
+- Add eyebrows, brow ridges, or any brow-like markings
+- Add hair, fur, or any head covering that isn't part of an outfit
 - Add text, logos, watermarks, or signatures
 - Move the character's position (left/right/up/down) from the composition mask
 - Resize the character larger or smaller than the composition mask
@@ -71,6 +77,7 @@ Do NOT:
 - Extend body parts outside the white mask boundaries
 - Flip or mirror the character — the character must ALWAYS face left
 - Change the background color from #FAFAF3
+- Add a white outline, stroke, glow, or halo around the character
 - Render the claw as a human hand (no palm, no fingers, no thumb)
 - Add extra claw digits/parts beyond a simple 2-part pincer
 
@@ -226,7 +233,7 @@ export function buildPrompt(options: VariationOptions): string {
   const variationBlock = `
 Facial expression variation:
 - The expression is: ${expressionLabel}
-- Copy the EXACT eye shape, pupil position, mouth curve, and brow angle from Image 3
+- Copy the EXACT eye shape, pupil position, and mouth curve from Image 3 (the character has NO eyebrows — do NOT add any)
 - Image 3 is ONLY a face reference for expression — do NOT let it influence the body silhouette, position, or size (those come from Image 2 only)
 - The expression must be visually distinguishable — eyes and mouth are the key differentiators
 - Keep the Pepe face structure — no extreme distortion
