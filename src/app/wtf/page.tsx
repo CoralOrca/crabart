@@ -18,20 +18,20 @@ export default function WtfPage() {
               <img src="/crabartlogo.png" alt="CrabArt" className="h-10 w-10 rounded-xl" />
               <h1 className="text-lg font-bold tracking-tight">CrabArt</h1>
             </Link>
-            <span className="rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-600">
+            <span className="rounded-md bg-red-100 px-4 py-2 text-xs font-medium text-red-600">
               wtf?
             </span>
           </div>
           <div className="flex items-center gap-2">
             <Link
               href="/"
-              className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-600 transition hover:bg-zinc-200"
+              className="rounded-md bg-zinc-100 px-4 py-2 text-xs font-medium text-zinc-600 transition hover:bg-zinc-200"
             >
               Playground
             </Link>
             <Link
               href="/gallery"
-              className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-600 transition hover:bg-zinc-200"
+              className="rounded-md bg-zinc-100 px-4 py-2 text-xs font-medium text-zinc-600 transition hover:bg-zinc-200"
             >
               Gallery
             </Link>

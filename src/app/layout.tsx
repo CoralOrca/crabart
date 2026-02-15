@@ -16,6 +16,14 @@ export const metadata: Metadata = {
   title: "CrabArt Playground — AI Art Generator",
   description:
     "Generate consistent CrabArt NFT characters using Google Nano Banana. Test variations of expression, outfit, and accessories.",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "32x32" },
+      { url: "/android-chrome-192x192.png", sizes: "192x192", type: "image/png" },
+      { url: "/android-chrome-512x512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
 };
 
 export default function RootLayout({

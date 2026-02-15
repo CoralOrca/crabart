@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { EXPRESSIONS, OUTFITS, ACCESSORIES } from "@/lib/prompt";
 import type { Generation } from "./page";
+
+const PAGE_SIZE = 20;
 
 function getLabel(
   list: readonly { id: string; label: string }[],
@@ -12,15 +14,22 @@ function getLabel(
 }
 
 export function GalleryGrid({
-  generations,
+  initialGenerations,
+  initialHasMore,
 }: {
-  generations: Generation[];
+  initialGenerations: Generation[];
+  initialHasMore: boolean;
 }) {
+  const [generations, setGenerations] = useState(initialGenerations);
+  const [hasMore, setHasMore] = useState(initialHasMore);
+  const [loading, setLoading] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [brokenImageIds, setBrokenImageIds] = useState<Set<string>>(new Set());
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
-  // Filter out broken images
-  const visibleGenerations = generations.filter(gen => !brokenImageIds.has(gen.id));
+  const visibleGenerations = generations.filter(
+    (gen) => !brokenImageIds.has(gen.id)
+  );
 
   const selected = selectedId
     ? visibleGenerations.find((g) => g.id === selectedId) ?? null
@@ -29,8 +38,45 @@ export function GalleryGrid({
   const close = useCallback(() => setSelectedId(null), []);
 
   const handleImageError = useCallback((id: string) => {
-    setBrokenImageIds(prev => new Set(prev).add(id));
+    setBrokenImageIds((prev) => new Set(prev).add(id));
   }, []);
+
+  const loadMore = useCallback(async () => {
+    if (loading || !hasMore) return;
+    setLoading(true);
+    try {
+      const res = await fetch(
+        `/api/gallery?offset=${generations.length}&limit=${PAGE_SIZE}`
+      );
+      const data = await res.json();
+      if (data.generations?.length) {
+        setGenerations((prev) => [...prev, ...data.generations]);
+      }
+      setHasMore(data.hasMore ?? false);
+    } catch (err) {
+      console.error("Failed to load more generations:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, [loading, hasMore, generations.length]);
+
+  // Infinite scroll via IntersectionObserver
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          loadMore();
+        }
+      },
+      { rootMargin: "400px" }
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [loadMore]);
 
   // Close on Escape
   useEffect(() => {
@@ -57,6 +103,7 @@ export function GalleryGrid({
               src={gen.image_url}
               alt={`CrabArt — ${getLabel(EXPRESSIONS, gen.expression)}`}
               className="h-full w-full object-cover"
+              loading="lazy"
               onError={() => handleImageError(gen.id)}
             />
             <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/60 to-transparent px-2 pb-2 pt-6 opacity-0 transition group-hover:opacity-100">
@@ -70,6 +117,13 @@ export function GalleryGrid({
             </div>
           </button>
         ))}
+      </div>
+
+      {/* Infinite scroll sentinel */}
+      <div ref={sentinelRef} className="py-8 text-center">
+        {loading && (
+          <p className="text-sm text-zinc-400">Loading more...</p>
+        )}
       </div>
 
       {/* Modal */}
@@ -99,7 +153,7 @@ export function GalleryGrid({
                 className="h-full w-full object-contain"
                 onError={() => {
                   handleImageError(selected.id);
-                  close(); // Close modal if image fails to load
+                  close();
                 }}
               />
             </div>
