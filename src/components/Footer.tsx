@@ -43,10 +43,10 @@ export default function Footer() {
             }`}
           >
             <span className="text-base">
-              {copied ? "✓" : "🦀"}
+              {copied ? "✓" : "🦞"}
             </span>
             <span>
-              {copied ? "Copied!" : "Buy me tokens"}
+              {copied ? "Copied!" : "Buy my agent tokens"}
             </span>
             <span className="hidden text-zinc-400 group-hover:inline">
               • {ETH_ADDRESS.slice(0, 6)}...{ETH_ADDRESS.slice(-4)}

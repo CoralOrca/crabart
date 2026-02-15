@@ -21,23 +21,23 @@ export interface Generation {
 
 const PAGE_SIZE = 20;
 
-async function getGenerations(): Promise<{ generations: Generation[]; hasMore: boolean }> {
-  const { data, error } = await supabase
+async function getGenerations(): Promise<{ generations: Generation[]; hasMore: boolean; totalCount: number }> {
+  const { data, error, count } = await supabase
     .from("generations")
-    .select("id, created_at, expression, outfit, accessory, image_url")
+    .select("id, created_at, expression, outfit, accessory, image_url", { count: "exact" })
     .order("created_at", { ascending: false })
     .range(0, PAGE_SIZE - 1);
 
   if (error) {
     console.error("Failed to fetch generations:", error.message);
-    return { generations: [], hasMore: false };
+    return { generations: [], hasMore: false, totalCount: 0 };
   }
   const generations = data ?? [];
-  return { generations, hasMore: generations.length === PAGE_SIZE };
+  return { generations, hasMore: generations.length === PAGE_SIZE, totalCount: count ?? 0 };
 }
 
 export default async function GalleryPage() {
-  const { generations, hasMore } = await getGenerations();
+  const { generations, hasMore, totalCount } = await getGenerations();
 
   return (
     <div className="min-h-screen bg-[#fafaf8] text-zinc-900">
@@ -72,7 +72,7 @@ export default async function GalleryPage() {
         <div className="mb-6">
           <h2 className="text-xl font-bold">Gallery</h2>
           <p className="text-sm text-zinc-500">
-            {generations.length} generation{generations.length !== 1 ? "s" : ""}
+            {totalCount} generation{totalCount !== 1 ? "s" : ""}
           </p>
         </div>
 
@@ -85,7 +85,7 @@ export default async function GalleryPage() {
             </p>
           </div>
         ) : (
-          <GalleryGrid initialGenerations={generations} initialHasMore={hasMore} />
+          <GalleryGrid initialGenerations={generations} initialHasMore={hasMore} totalCount={totalCount} />
         )}
       </main>
 
