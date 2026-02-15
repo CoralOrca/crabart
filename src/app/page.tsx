@@ -185,7 +185,7 @@ export default function PlaygroundPage() {
             </Link>
             <Link
               href="/wtf"
-              className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-600 transition hover:bg-zinc-200"
+              className="rounded-md bg-zinc-100 px-4 py-2 text-xs font-medium text-zinc-600 transition hover:bg-zinc-200"
             >
               wtf?
             </Link>
@@ -193,7 +193,7 @@ export default function PlaygroundPage() {
           <div className="flex items-center gap-2">
             <Link
               href="/gallery"
-              className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-600 transition hover:bg-zinc-200"
+              className="rounded-md bg-zinc-100 px-4 py-2 text-xs font-medium text-zinc-600 transition hover:bg-zinc-200"
             >
               Gallery
             </Link>
@@ -275,7 +275,7 @@ export default function PlaygroundPage() {
             <button
               onClick={handleGenerate}
               disabled={loading}
-              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-red-500 px-6 py-4 text-base font-semibold text-white shadow-md transition hover:bg-red-600 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[#EA2C0D] px-6 py-4 text-base font-semibold text-white shadow-md transition hover:bg-red-600 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading ? (
                 <>

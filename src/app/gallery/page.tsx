@@ -19,22 +19,25 @@ export interface Generation {
   image_url: string;
 }
 
-async function getGenerations(): Promise<Generation[]> {
+const PAGE_SIZE = 20;
+
+async function getGenerations(): Promise<{ generations: Generation[]; hasMore: boolean }> {
   const { data, error } = await supabase
     .from("generations")
     .select("id, created_at, expression, outfit, accessory, image_url")
     .order("created_at", { ascending: false })
-    .limit(100);
+    .range(0, PAGE_SIZE - 1);
 
   if (error) {
     console.error("Failed to fetch generations:", error.message);
-    return [];
+    return { generations: [], hasMore: false };
   }
-  return data ?? [];
+  const generations = data ?? [];
+  return { generations, hasMore: generations.length === PAGE_SIZE };
 }
 
 export default async function GalleryPage() {
-  const generations = await getGenerations();
+  const { generations, hasMore } = await getGenerations();
 
   return (
     <div className="min-h-screen bg-[#fafaf8] text-zinc-900">
@@ -49,7 +52,7 @@ export default async function GalleryPage() {
             </Link>
             <Link
               href="/wtf"
-              className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-600 transition hover:bg-zinc-200"
+              className="rounded-md bg-zinc-100 px-4 py-2 text-xs font-medium text-zinc-600 transition hover:bg-zinc-200"
             >
               wtf?
             </Link>
@@ -57,7 +60,7 @@ export default async function GalleryPage() {
           <div className="flex items-center gap-2">
             <Link
               href="/"
-              className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-600 transition hover:bg-zinc-200"
+              className="rounded-md bg-zinc-100 px-4 py-2 text-xs font-medium text-zinc-600 transition hover:bg-zinc-200"
             >
               Playground
             </Link>
@@ -82,7 +85,7 @@ export default async function GalleryPage() {
             </p>
           </div>
         ) : (
-          <GalleryGrid generations={generations} />
+          <GalleryGrid initialGenerations={generations} initialHasMore={hasMore} />
         )}
       </main>
 
