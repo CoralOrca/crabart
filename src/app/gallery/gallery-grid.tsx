@@ -16,9 +16,11 @@ function getLabel(
 export function GalleryGrid({
   initialGenerations,
   initialHasMore,
+  totalCount,
 }: {
   initialGenerations: Generation[];
   initialHasMore: boolean;
+  totalCount: number;
 }) {
   const [generations, setGenerations] = useState(initialGenerations);
   const [hasMore, setHasMore] = useState(initialHasMore);
