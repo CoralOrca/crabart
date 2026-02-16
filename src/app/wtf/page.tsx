@@ -13,12 +13,12 @@ export default function WtfPage() {
       <header className="border-b border-zinc-700 bg-zinc-800/50">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-6">
-            <Link href="/" className="flex items-center gap-2">
+            <Link href="/" className="flex items-center gap-3">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/crabartlogo.png" alt="CrabArt" className="h-10 w-10 rounded-lg" />
               <h1 className="text-h4 font-bold">CrabArt</h1>
             </Link>
-            <span className="rounded-lg bg-red-600/20 px-4 py-2 text-base font-medium text-red-400">
+            <span className="rounded-lg bg-zinc-600/30 px-4 py-2 text-base font-medium text-zinc-300">
               wtf?
             </span>
           </div>
