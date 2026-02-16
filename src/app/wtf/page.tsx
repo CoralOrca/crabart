@@ -16,25 +16,13 @@ export default function WtfPage() {
             <Link href="/" className="flex items-center gap-3">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/crabartlogo.png" alt="CrabArt" className="h-10 w-10 rounded-lg" />
-              <h1 className="text-h4 font-bold">CrabArt</h1>
+              <h2 className="text-h4 font-bold">CrabArt</h2>
             </Link>
             <span className="rounded-lg border-2 border-[#FF4D4D] bg-zinc-600/30 px-4 py-1.5 text-base font-medium text-zinc-300">
               wtf?
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <Link
-              href="/"
-              className="rounded-lg bg-zinc-700/30 px-4 py-2 text-base font-medium text-zinc-100 transition hover:bg-zinc-700/40"
-            >
-              Playground
-            </Link>
-            <Link
-              href="/gallery"
-              className="rounded-lg bg-zinc-700/30 px-4 py-2 text-base font-medium text-zinc-100 transition hover:bg-zinc-700/40"
-            >
-              Gallery
-            </Link>
           </div>
         </div>
       </header>

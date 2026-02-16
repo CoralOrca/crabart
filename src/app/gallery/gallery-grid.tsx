@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect, useRef } from "react";
 import { EXPRESSIONS, OUTFITS, ACCESSORIES } from "@/lib/prompt";
-import type { Generation } from "./page";
+import type { Generation } from "@/lib/types";
 
 const PAGE_SIZE = 20;
 
@@ -14,17 +14,42 @@ function getLabel(
 }
 
 export function GalleryGrid({
-  initialGenerations,
-  initialHasMore,
-  totalCount,
+  initialGenerations = [],
+  initialHasMore = true,
+  totalCount = 0,
 }: {
-  initialGenerations: Generation[];
-  initialHasMore: boolean;
-  totalCount: number;
-}) {
+  initialGenerations?: Generation[];
+  initialHasMore?: boolean;
+  totalCount?: number;
+} = {}) {
   const [generations, setGenerations] = useState(initialGenerations);
   const [hasMore, setHasMore] = useState(initialHasMore);
   const [loading, setLoading] = useState(false);
+
+  // Client-side initial fetch when no server-side data is provided
+  useEffect(() => {
+    if (initialGenerations.length > 0) return;
+    let cancelled = false;
+    (async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(`/api/gallery?offset=0&limit=${PAGE_SIZE}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        if (cancelled) return;
+        if (data.generations?.length) {
+          setGenerations(data.generations);
+        }
+        setHasMore(data.hasMore ?? false);
+      } catch (err) {
+        console.error("Failed to load gallery:", err);
+        if (!cancelled) setHasMore(false);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [brokenImageIds, setBrokenImageIds] = useState<Set<string>>(new Set());
   const sentinelRef = useRef<HTMLDivElement>(null);
@@ -57,6 +82,7 @@ export function GalleryGrid({
       setHasMore(data.hasMore ?? false);
     } catch (err) {
       console.error("Failed to load more generations:", err);
+      setHasMore(false);
     } finally {
       setLoading(false);
     }
@@ -98,7 +124,7 @@ export function GalleryGrid({
           <button
             key={gen.id}
             onClick={() => setSelectedId(gen.id)}
-            className="group relative aspect-square overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm transition hover:shadow-md"
+            className="group relative aspect-square overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition hover:shadow-md"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -135,7 +161,7 @@ export function GalleryGrid({
           onClick={close}
         >
           <div
-            className="relative max-h-[90vh] w-full max-w-2xl overflow-auto rounded-2xl bg-white shadow-xl"
+            className="relative max-h-[90vh] w-full max-w-2xl overflow-auto rounded-xl bg-white shadow-xl"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close button */}

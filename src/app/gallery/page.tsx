@@ -10,14 +10,8 @@ export const metadata = {
 
 export const revalidate = 60;
 
-export interface Generation {
-  id: string;
-  created_at: string;
-  expression: string;
-  outfit: string;
-  accessory: string;
-  image_url: string;
-}
+import type { Generation } from "@/lib/types";
+export type { Generation };
 
 const PAGE_SIZE = 20;
 
