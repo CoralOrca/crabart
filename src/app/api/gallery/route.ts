@@ -4,6 +4,13 @@ import { supabase } from "@/lib/supabase";
 const PAGE_SIZE = 20;
 
 export async function GET(request: NextRequest) {
+  if (!supabase) {
+    return NextResponse.json(
+      { error: "Supabase is not configured on the server." },
+      { status: 500 }
+    );
+  }
+
   const offset = Number(request.nextUrl.searchParams.get("offset") ?? "0");
   const limit = Math.min(
     Number(request.nextUrl.searchParams.get("limit") ?? PAGE_SIZE),

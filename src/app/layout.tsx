@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Lexend } from "next/font/google";
+import { Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const lexend = Lexend({
+  variable: "--font-lexend",
   subsets: ["latin"],
 });
 
@@ -13,9 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CrabArt Playground — AI Art Generator",
+  title: "Crabart Playground — AI Art Generator",
   description:
-    "Generate consistent CrabArt NFT characters using Google Nano Banana. Test variations of expression, outfit, and accessories.",
+    "Generate consistent Crabart NFT characters using Google Nano Banana. Test variations of expression, outfit, and accessories.",
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "32x32" },
@@ -34,7 +35,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${lexend.variable} ${geistMono.variable} antialiased`}
       >
         {children}
       </body>

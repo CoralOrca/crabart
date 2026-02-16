@@ -72,19 +72,23 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Rate limit: max 100 generations per day
-    const todayStart = new Date();
-    todayStart.setUTCHours(0, 0, 0, 0);
-    const { count, error: countError } = await supabase
-      .from("generations")
-      .select("*", { count: "exact", head: true })
-      .gte("created_at", todayStart.toISOString());
+    // Rate limit: max 50 generations per day
+    if (supabase) {
+      const todayStart = new Date();
+      todayStart.setUTCHours(0, 0, 0, 0);
+      const { count, error: countError } = await supabase
+        .from("generations")
+        .select("*", { count: "exact", head: true })
+        .gte("created_at", todayStart.toISOString());
 
-    if (!countError && count !== null && count >= 50) {
-      return NextResponse.json(
-        { error: "Daily generation limit reached (50/day). Try again tomorrow!" },
-        { status: 429 }
-      );
+      if (!countError && count !== null && count >= 50) {
+        return NextResponse.json(
+          { error: "Daily generation limit reached (50/day). Try again tomorrow!" },
+          { status: 429 }
+        );
+      }
+    } else {
+      console.warn("[generate] Supabase not configured; skipping rate limit and persistence.");
     }
 
     const body = (await req.json()) as GenerateRequest;
@@ -201,40 +205,42 @@ export async function POST(req: NextRequest) {
     );
 
     // Save to Supabase (non-blocking — errors are logged but don't affect the response)
-    const imageId = crypto.randomUUID();
-    const ext = (imageMimeType ?? "image/png").includes("png") ? "png" : "jpg";
-    const storagePath = `${imageId}.${ext}`;
-    const imageBuffer = Buffer.from(imageBase64, "base64");
+    if (supabase) {
+      const imageId = crypto.randomUUID();
+      const ext = (imageMimeType ?? "image/png").includes("png") ? "png" : "jpg";
+      const storagePath = `${imageId}.${ext}`;
+      const imageBuffer = Buffer.from(imageBase64, "base64");
 
-    const { error: uploadError } = await supabase.storage
-      .from("generations")
-      .upload(storagePath, imageBuffer, {
-        contentType: imageMimeType ?? "image/png",
-        upsert: false,
-      });
-
-    if (uploadError) {
-      console.error("[generate] Storage upload failed:", uploadError.message);
-    } else {
-      const { data: urlData } = supabase.storage
+      const { error: uploadError } = await supabase.storage
         .from("generations")
-        .getPublicUrl(storagePath);
+        .upload(storagePath, imageBuffer, {
+          contentType: imageMimeType ?? "image/png",
+          upsert: false,
+        });
 
-      const { error: dbError } = await supabase.from("generations").insert({
-        id: imageId,
-        expression: body.expressionId ?? "unknown",
-        outfit: body.outfit ?? "unknown",
-        accessory: body.accessory ?? "unknown",
-        image_path: storagePath,
-        image_url: urlData.publicUrl,
-        prompt,
-        mime_type: imageMimeType ?? "image/png",
-      });
-
-      if (dbError) {
-        console.error("[generate] DB insert failed:", dbError.message);
+      if (uploadError) {
+        console.error("[generate] Storage upload failed:", uploadError.message);
       } else {
-        console.log(`[generate] Saved to Supabase: ${storagePath}`);
+        const { data: urlData } = supabase.storage
+          .from("generations")
+          .getPublicUrl(storagePath);
+
+        const { error: dbError } = await supabase.from("generations").insert({
+          id: imageId,
+          expression: body.expressionId ?? "unknown",
+          outfit: body.outfit ?? "unknown",
+          accessory: body.accessory ?? "unknown",
+          image_path: storagePath,
+          image_url: urlData.publicUrl,
+          prompt,
+          mime_type: imageMimeType ?? "image/png",
+        });
+
+        if (dbError) {
+          console.error("[generate] DB insert failed:", dbError.message);
+        } else {
+          console.log(`[generate] Saved to Supabase: ${storagePath}`);
+        }
       }
     }
 

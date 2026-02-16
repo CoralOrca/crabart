@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef, useEffect, useMemo } from "react";
 import Link from "next/link";
 import {
   EXPRESSIONS,
@@ -10,6 +10,7 @@ import {
 } from "@/lib/prompt";
 import { createClient } from "@supabase/supabase-js";
 import Footer from "@/components/Footer";
+import ThemeToggle from "@/components/ThemeToggle";
 import { GalleryGrid } from "./gallery/gallery-grid";
 
 // ---------------------------------------------------------------------------
@@ -18,12 +19,19 @@ import { GalleryGrid } from "./gallery/gallery-grid";
 
 interface HistoryEntry {
   id: string;
-  timestamp: number;
   expression: string;
   outfit: string;
   accessory: string;
+  mimeType: string;
   imageDataUrl: string;
-  prompt: string;
+}
+
+const EXPRESSION_LABELS: ReadonlyMap<string, string> = new Map(
+  EXPRESSIONS.map(({ id, label }) => [id, label])
+);
+
+function getExpressionLabel(expressionId: string) {
+  return EXPRESSION_LABELS.get(expressionId) ?? expressionId;
 }
 
 // ---------------------------------------------------------------------------
@@ -35,7 +43,6 @@ export default function PlaygroundPage() {
   const [expression, setExpression] = useState<string>(EXPRESSIONS[0].id);
   const [outfit, setOutfit] = useState<string>(OUTFITS[0].id);
   const [accessory, setAccessory] = useState<string>(ACCESSORIES[0].id);
-
 
   // Generation state
   const [loading, setLoading] = useState(false);
@@ -73,12 +80,16 @@ export default function PlaygroundPage() {
   const downloadRef = useRef<HTMLAnchorElement>(null);
 
   // Build the current prompt (always uses reference images)
-  const currentPrompt = buildPrompt({
-    expression,
-    outfit,
-    accessory,
-    customNotes: "",
-  });
+  const currentPrompt = useMemo(
+    () =>
+      buildPrompt({
+        expression,
+        outfit,
+        accessory,
+        customNotes: "",
+      }),
+    [expression, outfit, accessory]
+  );
 
   // -------------------------------------------------------------------------
   // Generate
@@ -107,19 +118,20 @@ export default function PlaygroundPage() {
         throw new Error(data.error ?? `HTTP ${res.status}`);
       }
 
-      const dataUrl = `data:${data.mimeType};base64,${data.image}`;
+      const mimeType =
+        typeof data.mimeType === "string" ? data.mimeType : "image/png";
+      const dataUrl = `data:${mimeType};base64,${data.image}`;
       setCurrentImage(dataUrl);
-      setCurrentMime(data.mimeType);
+      setCurrentMime(mimeType);
 
       // Add to history
       const entry: HistoryEntry = {
         id: crypto.randomUUID(),
-        timestamp: Date.now(),
         expression,
         outfit,
         accessory,
+        mimeType,
         imageDataUrl: dataUrl,
-        prompt: currentPrompt,
       };
       setHistory((prev) => [entry, ...prev]);
     } catch (err: unknown) {
@@ -149,6 +161,7 @@ export default function PlaygroundPage() {
 
   const handleSelectHistory = useCallback((entry: HistoryEntry) => {
     setCurrentImage(entry.imageDataUrl);
+    setCurrentMime(entry.mimeType);
     setExpression(entry.expression);
     setOutfit(entry.outfit);
     setAccessory(entry.accessory);
@@ -172,26 +185,27 @@ export default function PlaygroundPage() {
   // -------------------------------------------------------------------------
 
   return (
-    <div className="min-h-screen bg-zinc-900 text-zinc-100">
+    <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
-      <header className="border-b border-zinc-700 bg-zinc-800/50">
+      <header className="border-b border-warm-gray bg-background">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-6">
             <Link href="/" className="flex items-center gap-3">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/crabartlogo.png" alt="CrabArt" className="h-10 w-10 rounded-default" />
+              <img src="/crabartlogo.png" alt="Crabart" className="h-10 w-10 rounded-default" />
               <h2 className="text-h4 font-bold">
-                CrabArt
+                Crabart
               </h2>
             </Link>
             <Link
               href="/wtf"
-              className="rounded-lg bg-zinc-700/30 px-4 py-2 text-base font-medium text-zinc-100 transition hover:bg-zinc-700/40"
+              className="rounded-lg bg-warm-gray/30 px-4 py-2 text-base font-medium text-foreground transition hover:bg-warm-gray/40"
             >
               wtf?
             </Link>
           </div>
           <div className="flex items-center gap-2">
+            <ThemeToggle />
           </div>
         </div>
       </header>
@@ -200,35 +214,37 @@ export default function PlaygroundPage() {
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[380px_1fr]">
           {/* ─── Left Panel: Controls ─── */}
           <div className="space-y-6">
-            <div className="text-xl leading-relaxed text-zinc-300 mb-12">
-              <p>
-                <strong className="text-zinc-100">CrabArt</strong> is a daily evolving NFT auction where the art changes as people - and AI agents - bid.
-              </p>
+            <div className="mb-10">
+              <div className="text-[2.5rem] font-semibold leading-[1.4] tracking-tight text-foreground">
+                A daily evolving NFT auction where the art changes as people{" "}
+                <span className="text-primary-accent">&mdash;&nbsp;and AI&nbsp;agents&nbsp;&mdash;</span>{" "}
+                bid.
+              </div>
             </div>
 
             {/* Variation Controls */}
-            <section className="rounded-xl border border-zinc-700 bg-zinc-800/50 p-6 shadow-sm">
+            <section className="rounded-xl border border-warm-gray bg-surface/50 p-6 shadow-sm">
               <div className="mb-4 flex items-center justify-between">
                 <h4 className="text-xs font-semibold uppercase text-zinc-500">
                   Variation Layers
                 </h4>
                 <button
                   onClick={handleRandomize}
-                  className="rounded-lg bg-zinc-700/30 px-3 py-1.5 text-sm font-medium text-zinc-100 transition hover:bg-zinc-700/40"
+                  className="rounded-lg bg-warm-gray/30 px-3 py-1.5 text-sm font-medium text-foreground transition hover:bg-warm-gray/40"
                 >
                   Randomize
                 </button>
               </div>
 
               {/* Expression */}
-              <label className="mb-1 block text-sm font-medium text-zinc-300">
+              <label className="mb-1 block text-sm font-medium text-foreground/70">
                 Expression
               </label>
               <div className="relative mb-4">
                 <select
                   value={expression}
                   onChange={(e) => setExpression(e.target.value)}
-                  className="w-full appearance-none rounded-lg border border-zinc-600 bg-zinc-700 px-3 py-2.5 pr-14 text-sm text-zinc-100 focus:border-red-400 focus:outline-none focus:ring-2 focus:ring-red-500/30"
+                  className="w-full appearance-none rounded-lg border border-warm-gray bg-warm-gray px-3 py-2.5 pr-14 text-sm text-foreground focus:border-red-400 focus:outline-none focus:ring-2 focus:ring-red-500/30"
                 >
                   {EXPRESSIONS.map((e) => (
                     <option key={e.id} value={e.id}>
@@ -251,7 +267,7 @@ export default function PlaygroundPage() {
               </div>
 
               {/* Outfit */}
-              <label className="mb-1 block text-sm font-medium text-zinc-300">
+              <label className="mb-1 block text-sm font-medium text-foreground/70">
                 Outfit
                 <span className="ml-1 font-normal text-zinc-500">({OUTFITS.length})</span>
               </label>
@@ -259,7 +275,7 @@ export default function PlaygroundPage() {
                 <select
                   value={outfit}
                   onChange={(e) => setOutfit(e.target.value)}
-                  className="w-full appearance-none rounded-lg border border-zinc-600 bg-zinc-700 px-3 py-2.5 pr-14 text-sm text-zinc-100 focus:border-red-400 focus:outline-none focus:ring-2 focus:ring-red-500/30"
+                  className="w-full appearance-none rounded-lg border border-warm-gray bg-warm-gray px-3 py-2.5 pr-14 text-sm text-foreground focus:border-red-400 focus:outline-none focus:ring-2 focus:ring-red-500/30"
                 >
                   {OUTFITS.map((o) => (
                     <option key={o.id} value={o.id}>
@@ -282,7 +298,7 @@ export default function PlaygroundPage() {
               </div>
 
               {/* Accessory */}
-              <label className="mb-1 block text-sm font-medium text-zinc-300">
+              <label className="mb-1 block text-sm font-medium text-foreground/70">
                 Accessory
                 <span className="ml-1 font-normal text-zinc-500">({ACCESSORIES.length})</span>
               </label>
@@ -290,7 +306,7 @@ export default function PlaygroundPage() {
                 <select
                   value={accessory}
                   onChange={(e) => setAccessory(e.target.value)}
-                  className="w-full appearance-none rounded-lg border border-zinc-600 bg-zinc-700 px-3 py-2.5 pr-14 text-sm text-zinc-100 focus:border-red-400 focus:outline-none focus:ring-2 focus:ring-red-500/30"
+                  className="w-full appearance-none rounded-lg border border-warm-gray bg-warm-gray px-3 py-2.5 pr-14 text-sm text-foreground focus:border-red-400 focus:outline-none focus:ring-2 focus:ring-red-500/30"
                 >
                   {ACCESSORIES.map((a) => (
                     <option key={a.id} value={a.id}>
@@ -326,7 +342,7 @@ export default function PlaygroundPage() {
                   Generating...
                 </>
               ) : (
-                "Generate CrabArt"
+                "Generate Crabart"
               )}
             </button>
             <p className="text-center text-xs text-zinc-500">
@@ -338,8 +354,8 @@ export default function PlaygroundPage() {
           {/* ─── Right Panel: Image + History ─── */}
           <div className="space-y-6">
             {/* Image Display */}
-            <section className="relative overflow-hidden rounded-xl border border-zinc-700 bg-zinc-800/50 shadow-sm">
-              <div className="flex aspect-[4/3] items-center justify-center bg-[#f5f5f0]">
+            <section className="relative overflow-hidden rounded-xl border border-warm-gray bg-surface/50 shadow-sm">
+              <div className="flex aspect-square items-center justify-center bg-[#f5f5f0]">
                 {loading ? (
                   <div className="flex flex-col items-center gap-4 text-zinc-400">
                     <SpinnerLarge />
@@ -349,7 +365,7 @@ export default function PlaygroundPage() {
                   /* eslint-disable-next-line @next/next/no-img-element */
                   <img
                     src={currentImage}
-                    alt="Generated CrabArt"
+                    alt="Generated Crabart"
                     className="h-full w-full object-contain"
                   />
                 ) : (
@@ -377,8 +393,8 @@ export default function PlaygroundPage() {
 
               {/* Error */}
               {error && (
-                <div className="border-t border-red-100 bg-red-50 px-6 py-3">
-                  <p className="text-sm text-red-700">
+                <div className="border-t border-error/20 bg-error/10 px-6 py-3">
+                  <p className="text-sm text-error">
                     <span className="font-semibold">Error:</span> {error}
                   </p>
                 </div>
@@ -386,16 +402,16 @@ export default function PlaygroundPage() {
 
               {/* Actions */}
               {currentImage && !loading && (
-                <div className="flex gap-2 border-t border-zinc-100 px-6 py-3">
+                <div className="flex gap-2 border-t border-warm-gray px-6 py-3">
                   <button
                     onClick={handleDownload}
-                    className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-800"
+                    className="rounded-lg bg-foreground px-4 py-2 text-sm font-medium text-background transition hover:bg-foreground/80"
                   >
-                    Download PNG
+                    Download {currentMime.includes("png") ? "PNG" : "JPG"}
                   </button>
                   <button
                     onClick={handleGenerate}
-                    className="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 transition hover:bg-zinc-50"
+                    className="rounded-lg border border-warm-gray bg-warm-gray/30 px-4 py-2 text-sm font-medium text-foreground transition hover:bg-warm-gray/50"
                   >
                     Regenerate
                   </button>
@@ -405,7 +421,7 @@ export default function PlaygroundPage() {
 
             {/* History */}
             {history.length > 0 && (
-              <section className="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm">
+              <section className="rounded-xl border border-warm-gray bg-surface/50 p-6 shadow-sm">
                 <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-zinc-500">
                   Generation History{" "}
                   <span className="font-normal text-zinc-400">
@@ -420,21 +436,18 @@ export default function PlaygroundPage() {
                       className={`group relative aspect-square overflow-hidden rounded-xl border-2 transition ${
                         selectedHistoryId === entry.id
                           ? "border-red-400 shadow-md"
-                          : "border-transparent hover:border-zinc-300"
+                          : "border-transparent hover:border-warm-gray"
                       }`}
                     >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={entry.imageDataUrl}
-                        alt={`CrabArt #${entry.expression}`}
+                        alt={`Crabart #${entry.expression}`}
                         className="h-full w-full object-cover"
                       />
                       <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/60 to-transparent px-1.5 pb-1 pt-4 opacity-0 transition group-hover:opacity-100">
                         <p className="truncate text-[10px] font-medium text-white">
-                          {
-                            EXPRESSIONS.find((e) => e.id === entry.expression)
-                              ?.label
-                          }
+                          {getExpressionLabel(entry.expression)}
                         </p>
                       </div>
                     </button>
@@ -447,9 +460,8 @@ export default function PlaygroundPage() {
       </main>
 
       {/* Gallery */}
-      <section className="mx-auto max-w-7xl px-6 py-8 border-t border-zinc-700">
-        <h2 className="mb-6 text-2xl font-bold">Gallery</h2>
-        <GalleryGrid />
+      <section className="mx-auto max-w-7xl px-6 py-8 border-t border-warm-gray">
+        <GalleryGrid showHeader />
       </section>
 
       {/* Hidden download anchor */}

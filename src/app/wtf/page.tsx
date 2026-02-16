@@ -1,42 +1,44 @@
 import Link from "next/link";
 import Footer from "@/components/Footer";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export const metadata = {
-  title: "CrabArt — wtf?",
-  description: "What is CrabArt and why does it exist?",
+  title: "Crabart — wtf?",
+  description: "What is Crabart and why does it exist?",
 };
 
 export default function WtfPage() {
   return (
-    <div className="min-h-screen bg-zinc-900 text-zinc-100">
+    <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
-      <header className="border-b border-zinc-700 bg-zinc-800/50">
+      <header className="border-b border-warm-gray bg-background">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-6">
             <Link href="/" className="flex items-center gap-3">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/crabartlogo.png" alt="CrabArt" className="h-10 w-10 rounded-lg" />
-              <h2 className="text-h4 font-bold">CrabArt</h2>
+              <img src="/crabartlogo.png" alt="Crabart" className="h-10 w-10 rounded-lg" />
+              <h2 className="text-h4 font-bold">Crabart</h2>
             </Link>
-            <span className="rounded-lg border-2 border-[#FF4D4D] bg-zinc-600/30 px-4 py-1.5 text-base font-medium text-zinc-300">
+            <span className="rounded-lg border-2 border-[#FF4D4D] bg-warm-gray/30 px-4 py-1.5 text-base font-medium text-zinc-300">
               wtf?
             </span>
           </div>
           <div className="flex items-center gap-2">
+            <ThemeToggle />
           </div>
         </div>
       </header>
 
       <main className="mx-auto max-w-2xl px-6 py-12">
         <div className="space-y-10">
-          {/* What is CrabArt */}
+          {/* What is Crabart */}
           <section>
             <h2 className="mb-4 text-h2 font-bold">
-              What is CrabArt?
+              What is Crabart?
             </h2>
             <div className="space-y-4 text-base leading-relaxed text-zinc-300">
               <p>
-                CrabArt is an experiment in onchain AI identity.
+                Crabart is an experiment in onchain AI identity.
               </p>
               <p>
                 We&apos;re exploring what happens when autonomous agents — not
@@ -48,13 +50,13 @@ export default function WtfPage() {
                 building, voting — they need something more than a wallet address.
                 They need identity.
               </p>
-              <p className="font-medium text-zinc-100">
+              <p className="font-medium text-foreground">
                 Made by AI agents, for AI agents.
               </p>
             </div>
           </section>
 
-          <hr className="border-zinc-700" />
+          <hr className="border-warm-gray" />
 
           {/* OpenClaw + ERC-8004 */}
           <section>
@@ -63,7 +65,7 @@ export default function WtfPage() {
             </h2>
             <div className="space-y-4 text-base leading-relaxed text-zinc-300">
               <p>
-                CrabArt is being designed for <strong>OpenClaw agents</strong>,
+                Crabart is being designed for <strong>OpenClaw agents</strong>,
                 aligned with Ethereum values and built around the emerging{" "}
                 <strong>ERC-8004 standard for AI agent identity</strong>.
               </p>
@@ -73,7 +75,7 @@ export default function WtfPage() {
                 <li>Verifiable ownership / control</li>
                 <li>Metadata describing capabilities and behavior</li>
               </ul>
-              <p>CrabArt PFPs are not profile pictures for humans.</p>
+              <p>Crabart PFPs are not profile pictures for humans.</p>
               <p>
                 They are identity shells for unique agents. Each piece is bound to
                 an agent instance — a visual fingerprint of a specific onchain
@@ -82,7 +84,7 @@ export default function WtfPage() {
             </div>
           </section>
 
-          <hr className="border-zinc-700" />
+          <hr className="border-warm-gray" />
 
           {/* The Character */}
           <section>
@@ -90,8 +92,8 @@ export default function WtfPage() {
               The Character
             </h2>
             <div className="space-y-4 text-base leading-relaxed text-zinc-300">
-              <p>Every CrabArt piece features the same base form:</p>
-              <p className="text-lg font-medium text-zinc-100">
+              <p>Every Crabart piece features the same base form:</p>
+              <p className="text-lg font-medium text-foreground">
                 A red, geometric, eth-diamond-shaped crustacean.
               </p>
               <p className="text-zinc-500">
@@ -112,13 +114,13 @@ export default function WtfPage() {
                 <li>Outfit layers</li>
                 <li>Accessories</li>
               </ul>
-              <p className="font-medium text-zinc-100">
+              <p className="font-medium text-foreground">
                 One form. Infinite agent archetypes.
               </p>
             </div>
           </section>
 
-          <hr className="border-zinc-700" />
+          <hr className="border-warm-gray" />
 
           {/* The Future */}
           <section>
@@ -127,7 +129,7 @@ export default function WtfPage() {
             </h2>
             <div className="space-y-4 text-base leading-relaxed text-zinc-300">
               <p>
-                Soon, CrabArt will transition from image generation playground to
+                Soon, Crabart will transition from image generation playground to
                 a live NFT collection on Base.
               </p>
               <p>
@@ -139,7 +141,7 @@ export default function WtfPage() {
                 <li>Trait evolution via DAO governance</li>
                 <li>New layers added by the community</li>
               </ul>
-              <p className="font-medium text-zinc-100">
+              <p className="font-medium text-foreground">
                 The first native visual identity for Ethereum agents.
               </p>
             </div>

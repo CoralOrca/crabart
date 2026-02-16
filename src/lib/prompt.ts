@@ -1,11 +1,11 @@
 /**
- * CrabArt — Prompt Template System
+ * Crabart — Prompt Template System
  *
  * The base prompt defines the character identity (NEVER changes).
  * Variation layers are appended to create daily unique pieces.
  *
  * Reference images are ALWAYS sent:
- *   - Image 1: Character reference (the canonical CrabArt character)
+ *   - Image 1: Character reference (the canonical Crabart character)
  *   - Image 2: Composition mask (white silhouette = where the character goes)
  *   - Image 3: Expression reference sheet (labeled grid of face-only expressions)
  */
