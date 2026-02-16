@@ -179,7 +179,7 @@ export default function PlaygroundPage() {
             <Link href="/" className="flex items-center gap-tight">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/crabartlogo.png" alt="CrabArt" className="h-10 w-10 rounded-default" />
-              <h1 className="text-h3">
+              <h1 className="text-h4 font-bold">
                 CrabArt
               </h1>
             </Link>
