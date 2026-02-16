@@ -171,29 +171,29 @@ export default function PlaygroundPage() {
   // -------------------------------------------------------------------------
 
   return (
-    <div className="min-h-screen bg-[#fafaf8] text-zinc-900">
+    <div className="min-h-screen bg-deep-background text-soft-white">
       {/* Header */}
-      <header className="border-b border-zinc-200 bg-white">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-3">
-            <Link href="/" className="flex items-center gap-3">
+      <header className="border-b border-warm-gray bg-surface">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-section py-standard">
+          <div className="flex items-center gap-section">
+            <Link href="/" className="flex items-center gap-tight">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/crabartlogo.png" alt="CrabArt" className="h-10 w-10 rounded-xl" />
-              <h1 className="text-lg font-bold tracking-tight">
+              <img src="/crabartlogo.png" alt="CrabArt" className="h-10 w-10 rounded-default" />
+              <h1 className="text-h2">
                 CrabArt
               </h1>
             </Link>
             <Link
               href="/wtf"
-              className="rounded-md bg-zinc-100 px-4 py-2 text-xs font-medium text-zinc-600 transition hover:bg-zinc-200"
+              className="rounded-default bg-warm-gray/20 px-standard py-tight text-body font-medium text-soft-white transition-default hover:bg-warm-gray/30"
             >
               wtf?
             </Link>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-tight">
             <Link
               href="/gallery"
-              className="rounded-md bg-zinc-100 px-4 py-2 text-xs font-medium text-zinc-600 transition hover:bg-zinc-200"
+              className="rounded-default bg-warm-gray/20 px-standard py-tight text-body font-medium text-soft-white transition-default hover:bg-warm-gray/30"
             >
               Gallery
             </Link>
@@ -206,14 +206,14 @@ export default function PlaygroundPage() {
           {/* ─── Left Panel: Controls ─── */}
           <div className="space-y-6">
             {/* Variation Controls */}
-            <section className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
+            <section className="rounded-default border border-warm-gray bg-surface p-section shadow-default">
               <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-sm font-semibold uppercase tracking-wider text-zinc-500">
+                <h2 className="text-h3 uppercase">
                   Variation Layers
                 </h2>
                 <button
                   onClick={handleRandomize}
-                  className="rounded-lg bg-zinc-100 px-3 py-1.5 text-xs font-medium text-zinc-700 transition hover:bg-zinc-200"
+                  className="rounded-default bg-warm-gray/20 px-tight py-micro text-caption font-medium text-soft-white transition-default hover:bg-warm-gray/30"
                 >
                   Randomize
                 </button>
@@ -275,7 +275,7 @@ export default function PlaygroundPage() {
             <button
               onClick={handleGenerate}
               disabled={loading}
-              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[#EA2C0D] px-6 py-4 text-base font-semibold text-white shadow-md transition hover:bg-red-600 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-tight rounded-default bg-primary-accent px-section py-standard text-body font-semibold text-soft-white shadow-default transition-default hover:opacity-90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-disabled"
             >
               {loading ? (
                 <>
