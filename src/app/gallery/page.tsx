@@ -40,19 +40,19 @@ export default async function GalleryPage() {
   const { generations, hasMore, totalCount } = await getGenerations();
 
   return (
-    <div className="min-h-screen bg-[#fafaf8] text-zinc-900">
+    <div className="min-h-screen bg-zinc-900 text-zinc-100">
       {/* Header */}
-      <header className="border-b border-zinc-200 bg-white">
+      <header className="border-b border-zinc-700 bg-zinc-800/50">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-6">
             <Link href="/" className="flex items-center gap-3">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/crabartlogo.png" alt="CrabArt" className="h-10 w-10 rounded-xl" />
-              <h1 className="text-lg font-bold tracking-tight">CrabArt</h1>
+              <img src="/crabartlogo.png" alt="CrabArt" className="h-10 w-10 rounded-lg" />
+              <h1 className="text-h4 font-bold">CrabArt</h1>
             </Link>
             <Link
               href="/wtf"
-              className="rounded-md bg-zinc-100 px-4 py-2 text-xs font-medium text-zinc-600 transition hover:bg-zinc-200"
+              className="rounded-lg bg-zinc-700/30 px-4 py-2 text-base font-medium text-zinc-100 transition hover:bg-zinc-700/40"
             >
               wtf?
             </Link>
@@ -60,7 +60,7 @@ export default async function GalleryPage() {
           <div className="flex items-center gap-2">
             <Link
               href="/"
-              className="rounded-md bg-zinc-100 px-4 py-2 text-xs font-medium text-zinc-600 transition hover:bg-zinc-200"
+              className="rounded-lg bg-zinc-700/30 px-4 py-2 text-base font-medium text-zinc-100 transition hover:bg-zinc-700/40"
             >
               Playground
             </Link>
@@ -70,8 +70,8 @@ export default async function GalleryPage() {
 
       <main className="mx-auto max-w-7xl px-6 py-8">
         <div className="mb-6">
-          <h2 className="text-xl font-bold">Gallery</h2>
-          <p className="text-sm text-zinc-500">
+          <h2 className="text-h3 font-bold">Gallery</h2>
+          <p className="text-sm text-zinc-400">
             {totalCount} generation{totalCount !== 1 ? "s" : ""}
           </p>
         </div>
