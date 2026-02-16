@@ -18,16 +18,16 @@ export default function Footer() {
   };
 
   return (
-    <footer className="border-t border-zinc-200 bg-white py-6">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-          <p className="text-xs text-zinc-400">
+    <footer className="border-t border-warm-gray bg-surface py-section">
+      <div className="mx-auto max-w-7xl px-section">
+        <div className="flex flex-col items-center justify-between gap-standard sm:flex-row">
+          <p className="text-caption text-warm-gray">
             built by{" "}
             <a
               href="https://x.com/coralorca"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-zinc-600 transition hover:text-zinc-900"
+              className="text-soft-white transition-default hover:text-primary-accent"
             >
               @coralorca
             </a>
@@ -36,20 +36,17 @@ export default function Footer() {
           
           <button
             onClick={handleCopyAddress}
-            className={`group flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-medium transition ${
+            className={`group flex items-center gap-tight rounded-default px-standard py-tight text-caption font-medium transition-default ${
               copied
-                ? "bg-green-50 text-green-700 border border-green-200"
-                : "bg-zinc-50 text-zinc-700 border border-zinc-200 hover:bg-zinc-100 hover:border-zinc-300"
+                ? "bg-success/10 text-success border border-success/30"
+                : "bg-warm-gray/20 text-soft-white border border-warm-gray/40 hover:bg-warm-gray/30 hover:border-warm-gray/60"
             }`}
           >
-            <span className="text-base">
+            <span className="text-body">
               {copied ? "✓" : "🦞"}
             </span>
             <span>
               {copied ? "Copied!" : "Buy my agent tokens"}
-            </span>
-            <span className="hidden text-zinc-400 group-hover:inline">
-              • {ETH_ADDRESS.slice(0, 6)}...{ETH_ADDRESS.slice(-4)}
             </span>
           </button>
         </div>
