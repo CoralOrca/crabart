@@ -18,7 +18,7 @@ export default function WtfPage() {
               <img src="/crabartlogo.png" alt="CrabArt" className="h-10 w-10 rounded-lg" />
               <h1 className="text-h4 font-bold">CrabArt</h1>
             </Link>
-            <span className="rounded-lg bg-zinc-600/30 px-4 py-2 text-base font-medium text-zinc-300">
+            <span className="rounded-lg border-2 border-[#FF4D4D] bg-zinc-600/30 px-4 py-1.5 text-base font-medium text-zinc-300">
               wtf?
             </span>
           </div>

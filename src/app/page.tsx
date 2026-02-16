@@ -208,7 +208,7 @@ export default function PlaygroundPage() {
             {/* Variation Controls */}
             <section className="rounded-2xl border border-zinc-700 bg-zinc-800/50 p-6 shadow-sm">
               <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-sm font-semibold uppercase text-zinc-500">
+                <h2 className="text-base font-semibold uppercase text-zinc-500">
                   Variation Layers
                 </h2>
                 <button
@@ -220,13 +220,13 @@ export default function PlaygroundPage() {
               </div>
 
               {/* Expression */}
-              <label className="mb-1 block text-xs font-medium text-zinc-300">
+              <label className="mb-1 block text-sm font-medium text-zinc-300">
                 Expression
               </label>
               <select
                 value={expression}
                 onChange={(e) => setExpression(e.target.value)}
-                className="mb-4 w-full rounded-lg border border-zinc-600 bg-zinc-700 px-3 py-2 pr-10 text-xs text-zinc-100 focus:border-red-400 focus:outline-none focus:ring-2 focus:ring-red-500/30"
+                className="mb-4 w-full rounded-lg border border-zinc-600 bg-zinc-700 px-3 py-2.5 pr-10 text-sm text-zinc-100 focus:border-red-400 focus:outline-none focus:ring-2 focus:ring-red-500/30"
               >
                 {EXPRESSIONS.map((e) => (
                   <option key={e.id} value={e.id}>
@@ -236,14 +236,14 @@ export default function PlaygroundPage() {
               </select>
 
               {/* Outfit */}
-              <label className="mb-1 block text-xs font-medium text-zinc-300">
+              <label className="mb-1 block text-sm font-medium text-zinc-300">
                 Outfit
                 <span className="ml-1 font-normal text-zinc-500">({OUTFITS.length})</span>
               </label>
               <select
                 value={outfit}
                 onChange={(e) => setOutfit(e.target.value)}
-                className="mb-4 w-full rounded-lg border border-zinc-600 bg-zinc-700 px-3 py-2 pr-10 text-xs text-zinc-100 focus:border-red-400 focus:outline-none focus:ring-2 focus:ring-red-500/30"
+                className="mb-4 w-full rounded-lg border border-zinc-600 bg-zinc-700 px-3 py-2.5 pr-10 text-sm text-zinc-100 focus:border-red-400 focus:outline-none focus:ring-2 focus:ring-red-500/30"
               >
                 {OUTFITS.map((o) => (
                   <option key={o.id} value={o.id}>
@@ -253,14 +253,14 @@ export default function PlaygroundPage() {
               </select>
 
               {/* Accessory */}
-              <label className="mb-1 block text-xs font-medium text-zinc-300">
+              <label className="mb-1 block text-sm font-medium text-zinc-300">
                 Accessory
                 <span className="ml-1 font-normal text-zinc-500">({ACCESSORIES.length})</span>
               </label>
               <select
                 value={accessory}
                 onChange={(e) => setAccessory(e.target.value)}
-                className="mb-4 w-full rounded-lg border border-zinc-600 bg-zinc-700 px-3 py-2 pr-10 text-xs text-zinc-100 focus:border-red-400 focus:outline-none focus:ring-2 focus:ring-red-500/30"
+                className="mb-4 w-full rounded-lg border border-zinc-600 bg-zinc-700 px-3 py-2.5 pr-10 text-sm text-zinc-100 focus:border-red-400 focus:outline-none focus:ring-2 focus:ring-red-500/30"
               >
                 {ACCESSORIES.map((a) => (
                   <option key={a.id} value={a.id}>
