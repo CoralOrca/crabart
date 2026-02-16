@@ -10,6 +10,7 @@ import {
 } from "@/lib/prompt";
 import { createClient } from "@supabase/supabase-js";
 import Footer from "@/components/Footer";
+import { GalleryGrid } from "./gallery/gallery-grid";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -179,9 +180,9 @@ export default function PlaygroundPage() {
             <Link href="/" className="flex items-center gap-3">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/crabartlogo.png" alt="CrabArt" className="h-10 w-10 rounded-default" />
-              <h1 className="text-h4 font-bold">
+              <h2 className="text-h4 font-bold">
                 CrabArt
-              </h1>
+              </h2>
             </Link>
             <Link
               href="/wtf"
@@ -191,12 +192,6 @@ export default function PlaygroundPage() {
             </Link>
           </div>
           <div className="flex items-center gap-2">
-            <Link
-              href="/gallery"
-              className="rounded-lg bg-zinc-700/30 px-4 py-2 text-base font-medium text-zinc-100 transition hover:bg-zinc-700/40"
-            >
-              Gallery
-            </Link>
           </div>
         </div>
       </header>
@@ -205,12 +200,18 @@ export default function PlaygroundPage() {
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[380px_1fr]">
           {/* ─── Left Panel: Controls ─── */}
           <div className="space-y-6">
+            <div className="text-xl leading-relaxed text-zinc-300 mb-12">
+              <p>
+                <strong className="text-zinc-100">CrabArt</strong> is a daily evolving NFT auction where the art changes as people - and AI agents - bid.
+              </p>
+            </div>
+
             {/* Variation Controls */}
-            <section className="rounded-2xl border border-zinc-700 bg-zinc-800/50 p-6 shadow-sm">
+            <section className="rounded-xl border border-zinc-700 bg-zinc-800/50 p-6 shadow-sm">
               <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-xs font-semibold uppercase text-zinc-500">
+                <h4 className="text-xs font-semibold uppercase text-zinc-500">
                   Variation Layers
-                </h2>
+                </h4>
                 <button
                   onClick={handleRandomize}
                   className="rounded-lg bg-zinc-700/30 px-3 py-1.5 text-sm font-medium text-zinc-100 transition hover:bg-zinc-700/40"
@@ -223,51 +224,93 @@ export default function PlaygroundPage() {
               <label className="mb-1 block text-sm font-medium text-zinc-300">
                 Expression
               </label>
-              <select
-                value={expression}
-                onChange={(e) => setExpression(e.target.value)}
-                className="mb-4 w-full rounded-lg border border-zinc-600 bg-zinc-700 px-3 py-2.5 pr-12 text-sm text-zinc-100 focus:border-red-400 focus:outline-none focus:ring-2 focus:ring-red-500/30"
-              >
-                {EXPRESSIONS.map((e) => (
-                  <option key={e.id} value={e.id}>
-                    {e.label}
-                  </option>
-                ))}
-              </select>
+              <div className="relative mb-4">
+                <select
+                  value={expression}
+                  onChange={(e) => setExpression(e.target.value)}
+                  className="w-full appearance-none rounded-lg border border-zinc-600 bg-zinc-700 px-3 py-2.5 pr-14 text-sm text-zinc-100 focus:border-red-400 focus:outline-none focus:ring-2 focus:ring-red-500/30"
+                >
+                  {EXPRESSIONS.map((e) => (
+                    <option key={e.id} value={e.id}>
+                      {e.label}
+                    </option>
+                  ))}
+                </select>
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-200"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M5.22 7.47a.75.75 0 0 1 1.06 0L10 11.19l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 8.53a.75.75 0 0 1 0-1.06Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
 
               {/* Outfit */}
               <label className="mb-1 block text-sm font-medium text-zinc-300">
                 Outfit
                 <span className="ml-1 font-normal text-zinc-500">({OUTFITS.length})</span>
               </label>
-              <select
-                value={outfit}
-                onChange={(e) => setOutfit(e.target.value)}
-                className="mb-4 w-full rounded-lg border border-zinc-600 bg-zinc-700 px-3 py-2.5 pr-12 text-sm text-zinc-100 focus:border-red-400 focus:outline-none focus:ring-2 focus:ring-red-500/30"
-              >
-                {OUTFITS.map((o) => (
-                  <option key={o.id} value={o.id}>
-                    {o.label}
-                  </option>
-                ))}
-              </select>
+              <div className="relative mb-4">
+                <select
+                  value={outfit}
+                  onChange={(e) => setOutfit(e.target.value)}
+                  className="w-full appearance-none rounded-lg border border-zinc-600 bg-zinc-700 px-3 py-2.5 pr-14 text-sm text-zinc-100 focus:border-red-400 focus:outline-none focus:ring-2 focus:ring-red-500/30"
+                >
+                  {OUTFITS.map((o) => (
+                    <option key={o.id} value={o.id}>
+                      {o.label}
+                    </option>
+                  ))}
+                </select>
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-200"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M5.22 7.47a.75.75 0 0 1 1.06 0L10 11.19l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 8.53a.75.75 0 0 1 0-1.06Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
 
               {/* Accessory */}
               <label className="mb-1 block text-sm font-medium text-zinc-300">
                 Accessory
                 <span className="ml-1 font-normal text-zinc-500">({ACCESSORIES.length})</span>
               </label>
-              <select
-                value={accessory}
-                onChange={(e) => setAccessory(e.target.value)}
-                className="mb-4 w-full rounded-lg border border-zinc-600 bg-zinc-700 px-3 py-2.5 pr-12 text-sm text-zinc-100 focus:border-red-400 focus:outline-none focus:ring-2 focus:ring-red-500/30"
-              >
-                {ACCESSORIES.map((a) => (
-                  <option key={a.id} value={a.id}>
-                    {a.label}
-                  </option>
-                ))}
-              </select>
+              <div className="relative mb-4">
+                <select
+                  value={accessory}
+                  onChange={(e) => setAccessory(e.target.value)}
+                  className="w-full appearance-none rounded-lg border border-zinc-600 bg-zinc-700 px-3 py-2.5 pr-14 text-sm text-zinc-100 focus:border-red-400 focus:outline-none focus:ring-2 focus:ring-red-500/30"
+                >
+                  {ACCESSORIES.map((a) => (
+                    <option key={a.id} value={a.id}>
+                      {a.label}
+                    </option>
+                  ))}
+                </select>
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-200"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M5.22 7.47a.75.75 0 0 1 1.06 0L10 11.19l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 8.53a.75.75 0 0 1 0-1.06Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
 
             </section>
 
@@ -275,7 +318,7 @@ export default function PlaygroundPage() {
             <button
               onClick={handleGenerate}
               disabled={loading}
-              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[#FF4D4D] px-6 py-4 text-base font-semibold text-white shadow-md transition hover:bg-red-600 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#FF4D4D] px-6 py-4 text-base font-semibold text-white shadow-md transition hover:bg-[#E43434] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading ? (
                 <>
@@ -286,14 +329,17 @@ export default function PlaygroundPage() {
                 "Generate CrabArt"
               )}
             </button>
+            <p className="text-center text-xs text-zinc-500">
+              powered by nano banana
+            </p>
 
           </div>
 
           {/* ─── Right Panel: Image + History ─── */}
           <div className="space-y-6">
             {/* Image Display */}
-            <section className="relative overflow-hidden rounded-2xl border border-zinc-700 bg-zinc-800/50 shadow-sm">
-              <div className="flex aspect-square items-center justify-center bg-[#f5f5f0]">
+            <section className="relative overflow-hidden rounded-xl border border-zinc-700 bg-zinc-800/50 shadow-sm">
+              <div className="flex aspect-[4/3] items-center justify-center bg-[#f5f5f0]">
                 {loading ? (
                   <div className="flex flex-col items-center gap-4 text-zinc-400">
                     <SpinnerLarge />
@@ -359,7 +405,7 @@ export default function PlaygroundPage() {
 
             {/* History */}
             {history.length > 0 && (
-              <section className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
+              <section className="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm">
                 <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-zinc-500">
                   Generation History{" "}
                   <span className="font-normal text-zinc-400">
@@ -399,6 +445,12 @@ export default function PlaygroundPage() {
           </div>
         </div>
       </main>
+
+      {/* Gallery */}
+      <section className="mx-auto max-w-7xl px-6 py-8 border-t border-zinc-700">
+        <h2 className="mb-6 text-2xl font-bold">Gallery</h2>
+        <GalleryGrid />
+      </section>
 
       {/* Hidden download anchor */}
       <a ref={downloadRef} className="hidden" />
