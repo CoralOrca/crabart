@@ -1,23 +1,23 @@
 @import "tailwindcss";
 
 :root {
-  /* Primary Colors */
+  /* Primary Colors (Dark Mode Default) */
   --primary-accent: #FF4D4D;
-  --deep-background: #FFFFFF;
-  --surface: #F4F4F5;
-  --highlight: #1BC5A3;
-  
-  /* Secondary Colors */
-  --warm-gray: #E4E4E7;
-  --soft-white: #18181B;
-  --warning: #FF6600;
-  --error: #DC2626;
-  --success: #0AC730;
-  
+  --deep-background: #0E0F13;
+  --surface: #181A20;
+  --highlight: #00FFC2;
+
+  /* Secondary Colors (Dark Mode Default) */
+  --warm-gray: #2A2D36;
+  --soft-white: #F5F5F7;
+  --warning: #FFB020;
+  --error: #FF4D4F;
+  --success: #22C55E;
+
   /* Typography */
-  --font-primary: 'Geist', system-ui, -apple-system, sans-serif;
+  --font-primary: 'Lexend', system-ui, -apple-system, sans-serif;
   --font-secondary: 'Geist Mono', monospace;
-  
+
   /* Font Sizes */
   --text-h1: 3rem; /* 48px */
   --text-h2: 2rem; /* 32px */
@@ -26,13 +26,13 @@
   --text-body: 1rem; /* 16px */
   --text-caption: 0.8125rem; /* 13px */
   --text-mono-data: 0.875rem; /* 14px */
-  
+
   /* Font Weights */
   --weight-regular: 400;
   --weight-medium: 500;
   --weight-semibold: 600;
   --weight-bold: 700;
-  
+
   /* Line Heights */
   --line-h1: 1.2;
   --line-h2: 1.3;
@@ -41,7 +41,7 @@
   --line-body: 1.5;
   --line-caption: 1.5;
   --line-mono-data: 1.6;
-  
+
   /* Letter Spacing */
   --letter-h1: -0.02em;
   --letter-h2: -0.01em;
@@ -50,7 +50,7 @@
   --letter-body: 0;
   --letter-caption: 0.01em;
   --letter-mono-data: 0;
-  
+
   /* Spacing */
   --space-micro: 0.25rem; /* 4px */
   --space-tight: 0.5rem; /* 8px */
@@ -58,7 +58,7 @@
   --space-section: 1.5rem; /* 24px */
   --space-card: 2rem; /* 32px */
   --space-major: 4rem; /* 64px */
-  
+
   /* Appearance */
   --radius: 10px;
   --border-width: 1px;
@@ -67,31 +67,24 @@
   --transition-duration: 150ms;
   --disabled-opacity: 0.5;
   --focus-ring-width: 3px;
-  
+
   /* Legacy Support */
   --background: var(--deep-background);
   --foreground: var(--soft-white);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* Primary Colors - Dark Mode */
-    --primary-accent: #FF4D4D;
-    --deep-background: #0E0F13;
-    --surface: #181A20;
-    --highlight: #00FFC2;
-    
-    /* Secondary Colors - Dark Mode */
-    --warm-gray: #2A2D36;
-    --soft-white: #F5F5F7;
-    --warning: #FFB020;
-    --error: #FF4D4F;
-    --success: #22C55E;
-    
-    /* Legacy Support */
-    --background: var(--deep-background);
-    --foreground: var(--soft-white);
-  }
+[data-theme="light"] {
+  --primary-accent: #FF4D4D;
+  --deep-background: #FFFFFF;
+  --surface: #F4F4F5;
+  --highlight: #1BC5A3;
+  --warm-gray: #E4E4E7;
+  --soft-white: #18181B;
+  --warning: #FF6600;
+  --error: #DC2626;
+  --success: #0AC730;
+  --background: var(--deep-background);
+  --foreground: var(--soft-white);
 }
 
 @theme inline {
@@ -104,7 +97,7 @@
   --color-warning: var(--warning);
   --color-error: var(--error);
   --color-success: var(--success);
-  --font-sans: var(--font-geist-sans, var(--font-primary));
+  --font-sans: var(--font-lexend, var(--font-primary));
   --font-mono: var(--font-geist-mono, var(--font-secondary));
 }
 

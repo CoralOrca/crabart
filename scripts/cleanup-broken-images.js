@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable @typescript-eslint/no-require-imports */
 
 /**
  * Cleanup script for broken images in the gallery
@@ -12,6 +13,7 @@
  */
 
 const { createClient } = require('@supabase/supabase-js');
+const readline = require('readline');
 
 // Check for environment variables
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -30,7 +32,7 @@ async function checkImageExists(url) {
   try {
     const response = await fetch(url, { method: 'HEAD' });
     return response.ok;
-  } catch (error) {
+  } catch {
     return false;
   }
 }
@@ -77,15 +79,15 @@ async function cleanup() {
   console.log('IDs:', brokenIds.join(', '));
   
   // Ask for confirmation
-  const readline = require('readline').createInterface({
+  const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
   });
   
-  readline.question('\n⚠️  Delete these records from the database? (yes/no): ', async (answer) => {
+  rl.question('\n⚠️  Delete these records from the database? (yes/no): ', async (answer) => {
     if (answer.toLowerCase() !== 'yes') {
       console.log('Cancelled');
-      readline.close();
+      rl.close();
       return;
     }
     
@@ -102,7 +104,7 @@ async function cleanup() {
       console.log(`✅ Successfully deleted ${brokenIds.length} broken records`);
     }
     
-    readline.close();
+    rl.close();
   });
 }
 
