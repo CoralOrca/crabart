@@ -171,29 +171,29 @@ export default function PlaygroundPage() {
   // -------------------------------------------------------------------------
 
   return (
-    <div className="min-h-screen bg-deep-background text-soft-white">
+    <div className="min-h-screen bg-zinc-900 text-zinc-100">
       {/* Header */}
-      <header className="border-b border-warm-gray bg-surface">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-section py-standard">
-          <div className="flex items-center gap-section">
+      <header className="border-b border-zinc-700 bg-zinc-800/50">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+          <div className="flex items-center gap-6">
             <Link href="/" className="flex items-center gap-tight">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/crabartlogo.png" alt="CrabArt" className="h-10 w-10 rounded-default" />
-              <h1 className="text-h2">
+              <h1 className="text-h3">
                 CrabArt
               </h1>
             </Link>
             <Link
               href="/wtf"
-              className="rounded-default bg-warm-gray/20 px-standard py-tight text-body font-medium text-soft-white transition-default hover:bg-warm-gray/30"
+              className="rounded-lg bg-zinc-700/30 px-4 py-2 text-base font-medium text-zinc-100 transition hover:bg-zinc-700/40"
             >
               wtf?
             </Link>
           </div>
-          <div className="flex items-center gap-tight">
+          <div className="flex items-center gap-2">
             <Link
               href="/gallery"
-              className="rounded-default bg-warm-gray/20 px-standard py-tight text-body font-medium text-soft-white transition-default hover:bg-warm-gray/30"
+              className="rounded-lg bg-zinc-700/30 px-4 py-2 text-base font-medium text-zinc-100 transition hover:bg-zinc-700/40"
             >
               Gallery
             </Link>
@@ -206,27 +206,27 @@ export default function PlaygroundPage() {
           {/* ─── Left Panel: Controls ─── */}
           <div className="space-y-6">
             {/* Variation Controls */}
-            <section className="rounded-default border border-warm-gray bg-surface p-section shadow-default">
+            <section className="rounded-2xl border border-zinc-700 bg-zinc-800/50 p-6 shadow-sm">
               <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-h3 uppercase">
+                <h2 className="text-h4 uppercase text-soft-white/60">
                   Variation Layers
                 </h2>
                 <button
                   onClick={handleRandomize}
-                  className="rounded-default bg-warm-gray/20 px-tight py-micro text-caption font-medium text-soft-white transition-default hover:bg-warm-gray/30"
+                  className="rounded-lg bg-zinc-700/30 px-3 py-1.5 text-sm font-medium text-zinc-100 transition hover:bg-zinc-700/40"
                 >
                   Randomize
                 </button>
               </div>
 
               {/* Expression */}
-              <label className="mb-1 block text-sm font-medium text-zinc-700">
+              <label className="mb-1 block text-sm font-medium text-zinc-300">
                 Expression
               </label>
               <select
                 value={expression}
                 onChange={(e) => setExpression(e.target.value)}
-                className="mb-4 w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2.5 text-sm focus:border-red-300 focus:outline-none focus:ring-2 focus:ring-red-100"
+                className="mb-4 w-full rounded-lg border border-zinc-600 bg-zinc-700 px-3 py-2.5 text-sm text-zinc-100 focus:border-red-400 focus:outline-none focus:ring-2 focus:ring-red-500/30"
               >
                 {EXPRESSIONS.map((e) => (
                   <option key={e.id} value={e.id}>
@@ -236,14 +236,14 @@ export default function PlaygroundPage() {
               </select>
 
               {/* Outfit */}
-              <label className="mb-1 block text-sm font-medium text-zinc-700">
+              <label className="mb-1 block text-sm font-medium text-zinc-300">
                 Outfit
-                <span className="ml-1 font-normal text-zinc-400">({OUTFITS.length})</span>
+                <span className="ml-1 font-normal text-zinc-500">({OUTFITS.length})</span>
               </label>
               <select
                 value={outfit}
                 onChange={(e) => setOutfit(e.target.value)}
-                className="mb-4 w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2.5 text-sm focus:border-red-300 focus:outline-none focus:ring-2 focus:ring-red-100"
+                className="mb-4 w-full rounded-lg border border-zinc-600 bg-zinc-700 px-3 py-2.5 text-sm text-zinc-100 focus:border-red-400 focus:outline-none focus:ring-2 focus:ring-red-500/30"
               >
                 {OUTFITS.map((o) => (
                   <option key={o.id} value={o.id}>
@@ -253,14 +253,14 @@ export default function PlaygroundPage() {
               </select>
 
               {/* Accessory */}
-              <label className="mb-1 block text-sm font-medium text-zinc-700">
+              <label className="mb-1 block text-sm font-medium text-zinc-300">
                 Accessory
-                <span className="ml-1 font-normal text-zinc-400">({ACCESSORIES.length})</span>
+                <span className="ml-1 font-normal text-zinc-500">({ACCESSORIES.length})</span>
               </label>
               <select
                 value={accessory}
                 onChange={(e) => setAccessory(e.target.value)}
-                className="mb-4 w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2.5 text-sm focus:border-red-300 focus:outline-none focus:ring-2 focus:ring-red-100"
+                className="mb-4 w-full rounded-lg border border-zinc-600 bg-zinc-700 px-3 py-2.5 text-sm text-zinc-100 focus:border-red-400 focus:outline-none focus:ring-2 focus:ring-red-500/30"
               >
                 {ACCESSORIES.map((a) => (
                   <option key={a.id} value={a.id}>
@@ -275,7 +275,7 @@ export default function PlaygroundPage() {
             <button
               onClick={handleGenerate}
               disabled={loading}
-              className="flex w-full items-center justify-center gap-tight rounded-default bg-primary-accent px-section py-standard text-body font-semibold text-soft-white shadow-default transition-default hover:opacity-90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-disabled"
+              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[#FF4D4D] px-6 py-4 text-base font-semibold text-white shadow-md transition hover:bg-red-600 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading ? (
                 <>
@@ -292,7 +292,7 @@ export default function PlaygroundPage() {
           {/* ─── Right Panel: Image + History ─── */}
           <div className="space-y-6">
             {/* Image Display */}
-            <section className="relative overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm">
+            <section className="relative overflow-hidden rounded-2xl border border-zinc-700 bg-zinc-800/50 shadow-sm">
               <div className="flex aspect-square items-center justify-center bg-[#f5f5f0]">
                 {loading ? (
                   <div className="flex flex-col items-center gap-4 text-zinc-400">
