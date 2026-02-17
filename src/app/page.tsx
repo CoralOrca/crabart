@@ -230,7 +230,7 @@ export default function PlaygroundPage() {
                 </h4>
                 <button
                   onClick={handleRandomize}
-                  className="rounded-lg bg-warm-gray/30 px-3 py-1.5 text-sm font-medium text-foreground transition hover:bg-warm-gray/40"
+                  className="rounded-lg bg-warm-gray/30 px-3 py-1.5 text-sm font-medium text-[#00F5D4] transition hover:bg-warm-gray/40"
                 >
                   Randomize
                 </button>
@@ -355,7 +355,7 @@ export default function PlaygroundPage() {
           <div className="space-y-6">
             {/* Image Display */}
             <section className="relative overflow-hidden rounded-xl border border-warm-gray bg-surface/50 shadow-sm">
-              <div className="flex aspect-square items-center justify-center bg-[#f5f5f0]">
+              <div className="flex aspect-square items-center justify-center bg-surface">
                 {loading ? (
                   <div className="flex flex-col items-center gap-4 text-zinc-400">
                     <SpinnerLarge />

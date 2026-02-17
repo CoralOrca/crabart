@@ -17,15 +17,24 @@ export async function GET(request: NextRequest) {
     50
   );
 
-  const { data, error } = await supabase
-    .from("generations")
-    .select("id, created_at, expression, outfit, accessory, image_url")
-    .order("created_at", { ascending: false })
-    .range(offset, offset + limit - 1);
+  const [{ data, error }, { count }] = await Promise.all([
+    supabase
+      .from("generations")
+      .select("id, created_at, expression, outfit, accessory, image_url")
+      .order("created_at", { ascending: false })
+      .range(offset, offset + limit - 1),
+    supabase
+      .from("generations")
+      .select("*", { count: "exact", head: true }),
+  ]);
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  return NextResponse.json({ generations: data ?? [], hasMore: (data?.length ?? 0) === limit });
+  return NextResponse.json({
+    generations: data ?? [],
+    hasMore: (data?.length ?? 0) === limit,
+    totalCount: count ?? 0,
+  });
 }
