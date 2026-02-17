@@ -36,6 +36,7 @@ export function GalleryGrid({
   const [generations, setGenerations] = useState(initialGenerations);
   const [hasMore, setHasMore] = useState(initialHasMore);
   const [loading, setLoading] = useState(false);
+  const [totalGenerated, setTotalGenerated] = useState(totalCount);
 
   // Client-side initial fetch when no server-side data is provided
   useEffect(() => {
@@ -52,6 +53,7 @@ export function GalleryGrid({
           setGenerations(data.generations);
         }
         setHasMore(data.hasMore ?? false);
+        if (data.totalCount != null) setTotalGenerated(data.totalCount);
       } catch (err) {
         console.error("Failed to load gallery:", err);
         if (!cancelled) setHasMore(false);
@@ -128,7 +130,7 @@ export function GalleryGrid({
     return () => window.removeEventListener("keydown", handler);
   }, [selected, close]);
 
-  const displayCount = totalCount || generations.length;
+  const displayCount = totalGenerated || generations.length;
 
   return (
     <>
@@ -136,7 +138,7 @@ export function GalleryGrid({
         <h2 className="mb-6 text-2xl font-bold">
           Gallery{" "}
           {displayCount > 0 && (
-            <span className="font-normal text-zinc-500">{displayCount}</span>
+            <span className="font-normal text-[#00F5D4]">{displayCount}</span>
           )}
         </h2>
       )}
@@ -195,7 +197,7 @@ export function GalleryGrid({
             </button>
 
             {/* Image */}
-            <div className="aspect-square bg-[#f5f5f0]">
+            <div className="aspect-square bg-surface">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={selected.image_url}
